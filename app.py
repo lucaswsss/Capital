@@ -93,10 +93,11 @@ elif choice=="Par joueur":
 
     joueur_sel = st.selectbox("Choisir un joueur :", sorted(df["Joueur"].unique()))
     df_filtered = df[df["Joueur"]==joueur_sel]
-    df_final = df_filtered[df_filtered["Contrat"]=="25"]
+    #df_final = df_filtered[df_filtered["Contrat"]=="25"]
+    df_filtered2 = df2[df2["Joueur"]==joueur_sel]
     data_joueur = taux_joueur[taux_joueur["Joueur"] == joueur_sel]
     taux_reussite2=df_filtered["Réussi"].mean()
-    score_moyen2=df2["Score_final"].mean()
+    score_moyen2=df_filtered2["Score_final"].mean()
 
     col1, col2 = st.columns(2)
     col1.metric("Taux de réussite global des contrats (nombres inclus)", f"{taux_reussite2:.1%}")
