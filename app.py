@@ -43,7 +43,7 @@ if choice=="Général":
     # --- Statistiques globales ---
     st.subheader("📈 Statistiques globales")
     taux_reussite = df["Réussi"].mean()
-    score_moyen = df2["Score_Final"].mean()
+    score_moyen = df2["Score_final"].mean()
 
     col1, col2 = st.columns(2)
     col1.metric("Taux de réussite global des contrats (nombres inclus)", f"{taux_reussite:.1%}")
@@ -96,7 +96,7 @@ elif choice=="Par joueur":
     df_final = df_filtered[df_filtered["Contrat"]=="25"]
     data_joueur = taux_joueur[taux_joueur["Joueur"] == joueur_sel]
     taux_reussite2=df_filtered["Réussi"].mean()
-    score_moyen2=df2["Score_Final"].mean()
+    score_moyen2=df2["Score_final"].mean()
 
     col1, col2 = st.columns(2)
     col1.metric("Taux de réussite global des contrats (nombres inclus)", f"{taux_reussite2:.1%}")
