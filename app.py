@@ -14,7 +14,7 @@ def load_data1():
     return df
 
 def load_data2():
-    df = pd.read_csv("data/parties.csv")
+    df2 = pd.read_csv("data/parties.csv")
     # Conversion de "Réussi" en numérique si besoin
     return df2
 
