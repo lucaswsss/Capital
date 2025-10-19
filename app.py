@@ -8,12 +8,19 @@ st.set_page_config(page_title="🎯 Le Capital", layout="wide")
 
 # --- Chargement des données ---
 @st.cache_data
-def load_data():
+def load_data1():
     df = pd.read_csv("data/capital.csv")
     # Conversion de "Réussi" en numérique si besoin
     return df
 
-df = load_data()
+def load_data2():
+    df = pd.read_csv("data/parties.csv")
+    # Conversion de "Réussi" en numérique si besoin
+    return df2
+
+
+df = load_data1()
+df2 = load_data2()
 
 st.title("🎯 Darts Club des Gones - Capital 🎯")
 st.markdown("Visualisez vos performances et les statistiques globales des soirées !")
@@ -29,14 +36,14 @@ choice = st.sidebar.radio("Sélectionnez une section", ["Général",
 
 #df_filtered = df[df["Joueur"].isin(joueurs_sel) & df["Contrat"].isin(contrats_sel)]
 
-df_final = df[df["Contrat"]=="25"]
+#df_final = df[df["Contrat"]=="25"]
 
 if choice=="Général":
 
     # --- Statistiques globales ---
     st.subheader("📈 Statistiques globales")
     taux_reussite = df["Réussi"].mean()
-    score_moyen = df_final["Score_Après"].mean()
+    score_moyen = df2["Score_Final"].mean()
 
     col1, col2 = st.columns(2)
     col1.metric("Taux de réussite global des contrats (nombres inclus)", f"{taux_reussite:.1%}")
@@ -89,7 +96,7 @@ elif choice=="Par joueur":
     df_final = df_filtered[df_filtered["Contrat"]=="25"]
     data_joueur = taux_joueur[taux_joueur["Joueur"] == joueur_sel]
     taux_reussite2=df_filtered["Réussi"].mean()
-    score_moyen2=df_final["Score_Après"].mean()
+    score_moyen2=df2["Score_Final"].mean()
 
     col1, col2 = st.columns(2)
     col1.metric("Taux de réussite global des contrats (nombres inclus)", f"{taux_reussite2:.1%}")
