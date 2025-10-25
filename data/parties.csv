@@ -12,7 +12,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 3,2025-10-08,P1,Matthieu,4,4,3,3
 3,2025-10-08,P1,Lolo,142,2,3,4
 4,2025-10-08,P1,Thib,128,1,4,1
-4,2025-10-08,P1,Touss,64,3,4,2
+4,2025-10-08,P1,Toussaint,64,3,4,2
 4,2025-10-08,P1,Evan,11,4,4,3
 4,2025-10-08,P1,Q,85,2,4,4
 5,2025-10-08,P1,Carré,58,2,5,1
@@ -29,7 +29,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 7,2025-10-08,P2,Q,45,3,2,4
 8,2025-10-08,P2,Stef,206,1,3,1
 8,2025-10-08,P2,Ely,0,4,3,2
-8,2025-10-08,P2,Touss,27,2,3,3
+8,2025-10-08,P2,Toussaint,27,2,3,3
 8,2025-10-08,P2,Remi,3,3,3,4
 9,2025-10-08,P2,Ethos,32,4,4,1
 9,2025-10-08,P2,Lucas,62,2,4,2
@@ -45,7 +45,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 11,2025-10-08,DF,Hepa,27,3,1,4
 12,2025-10-08,DF,Quentin,59,2,2,1
 12,2025-10-08,DF,Lucas,24,3,2,2
-12,2025-10-08,DF,Touss,23,4,2,3
+12,2025-10-08,DF,Toussaint,23,4,2,3
 12,2025-10-08,DF,Aurel,111,1,2,4
 13,2025-10-08,DF,Jeremy,273,1,3,1
 13,2025-10-08,DF,Ely,146,3,3,2
@@ -69,7 +69,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 17,2025-10-15,P1,Aurel,55,3,1,3
 17,2025-10-15,P1,Benoit,44,4,1,4
 18,2025-10-15,P1,Lolo,121,2,2,1
-18,2025-10-15,P1,Touss,142,1,2,2
+18,2025-10-15,P1,Toussaint,142,1,2,2
 18,2025-10-15,P1,Lucas,116,3,2,3
 18,2025-10-15,P1,V6,34,4,2,4
 19,2025-10-15,P1,Thib,4,4,3,1
@@ -82,7 +82,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 20,2025-10-15,P1,Hepa,55,3,4,4
 21,2025-10-15,P2,Stef,134,2,1,1
 21,2025-10-15,P2,Mauricio,34,4,1,2
-21,2025-10-15,P2,Touss,139,1,1,3
+21,2025-10-15,P2,Toussaint,139,1,1,3
 21,2025-10-15,P2,Albert,44,3,1,4
 22,2025-10-15,P2,Lolo,31,4,2,1
 22,2025-10-15,P2,Manu,135,1,2,2
@@ -106,7 +106,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 26,2025-10-15,DF,Mauricio,63,1,2,4
 27,2025-10-15,DF,Thib,62,3,3,1
 27,2025-10-15,DF,Lucagino,1,4,3,2
-27,2025-10-15,DF,Touss,78,2,3,3
+27,2025-10-15,DF,Toussaint,78,2,3,3
 27,2025-10-15,DF,Stef,95,1,3,4
 28,2025-10-15,DF,Manu,28,2,4,1
 28,2025-10-15,DF,Quentin,13,4,4,2
