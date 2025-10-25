@@ -146,8 +146,8 @@ elif choice=="Soirées":
     df_soiree=(
         df2.groupby("Date")
         .agg(
-            nb_joueurs=("Joueur","nunique"),
-            score_moyen=("Score_final","mean")
+            Nombre_joueurs=("Joueur","nunique"),
+            Score_moyen=("Score_final","mean")
         )
         )
     df_soiree["Taux de réussite"] = taux_par_soiree.values*100
@@ -155,13 +155,14 @@ elif choice=="Soirées":
     df_soiree.style
     .format({
         "Taux de réussite": "{:.1f}%",
-        "score_moyen": "{:.1f}"
+        "Score_moyen": "{:.1f}"
     })
-    .bar(subset=["Taux de réussite"], color="#4CAF50")
-    .background_gradient(subset=["score_moyen"], cmap="Blues")
+    #.bar(subset=["Taux de réussite"], color="#4CAF50")
+    #.bar(subset=["Score_moyen"], color="#4CAF50")
+    #.background_gradient(subset=["Score_moyen"], cmap="Blues")
 )
 
-    st.dataframe(styled_df, use_container_width=True)
+    st.table(styled_df)
 
 
 elif choice=="Données" :
