@@ -147,7 +147,7 @@ elif choice=="Soirées":
         df2.groupby("Date")
         .agg(
             nb_joueurs=("Joueur","nunique"),
-            score_moyen=("Score final","mean")
+            score_moyen=("Score_final","mean")
         )
         )
     df_soiree["Taux de réussite"] = taux_par_soiree.values*100
