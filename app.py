@@ -29,7 +29,7 @@ st.markdown("Visualisez vos performances et les statistiques globales des soiré
 
 st.sidebar.title("Navigateur")
 choice = st.sidebar.radio("Sélectionnez une section", ["Général", 
-                                                      "Par joueur","Données" ]) 
+                                                      "Par joueur","Par contrat","Soirées","Données" ]) 
 #st.sidebar.header("🧮 Filtres")
 #joueurs_sel = st.sidebar.multiselect("Sélectionnez les joueurs :", sorted(df["Joueur"].unique()), default=df["Joueur"].unique())
 #contrats_sel = st.sidebar.multiselect("Sélectionnez les contrats :", sorted(df["Contrat"].unique()), default=df["Contrat"].unique())
@@ -130,7 +130,19 @@ elif choice=="Par joueur":
     plt.xticks(rotation=45)
     st.pyplot(fig3)
 
+    st.subheader("Historique des parties")
+    joueur=df2[df2["Joueur"]==joueur_sel]
+    st.dataframe(joueur)
+
+elif choice=="Par contrat":
+    st.dataframe(df2)
+
+elif choice=="Soirées":
+    st.dataframe(df2)
+
+
+
 elif choice=="Données" :
     # --- Données brutes ---
-    st.subheader("📋 Données filtrées")
+    st.subheader("📋 Données")
     st.dataframe(df)
