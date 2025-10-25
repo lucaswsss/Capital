@@ -138,8 +138,30 @@ elif choice=="Par contrat":
     st.dataframe(df2)
 
 elif choice=="Soirées":
-    st.dataframe(df2)
+    st.subheader("📅 Résumé des soirées")
+    taux_par_soiree=(
+        df.groupby("Date")["Réussi"].mean()
 
+    )
+    df_soiree=(
+        df2.groupby("Date")
+        .agg(
+            nb_joueurs=("Joueur","nunique"),
+            score_moyen=("Score final","mean")
+        )
+        )
+    df_soiree["Taux de réussite"] = taux_par_soiree.values*100
+    styled_df = (
+    df_soiree.style
+    .format({
+        "Taux de réussite": "{:.1f}%",
+        "score_moyen": "{:.1f}"
+    })
+    .bar(subset=["Taux de réussite"], color="#4CAF50")
+    .background_gradient(subset=["score_moyen"], cmap="Blues")
+)
+
+    st.dataframe(styled_df, use_container_width=True)
 
 
 elif choice=="Données" :
