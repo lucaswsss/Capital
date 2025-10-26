@@ -44,10 +44,12 @@ if choice=="Général":
     st.subheader("📈 Statistiques globales")
     taux_reussite = df["Réussi"].mean()
     score_moyen = df2["Score_final"].mean()
+    score_vainqueur=df2[df2["Classement_final"]==1]["Score_final"].mean()
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     col1.metric("Taux de réussite global des contrats (nombres inclus)", f"{taux_reussite:.1%}")
     col2.metric("Score final moyen", f"{score_moyen:.0f}")
+    col3.metric("Score final moyen pour un vainqueur", f"{score_vainqueur:.0f}")
 
     # --- Taux de réussite par contrat ---
     st.subheader("🎯 Taux de réussite par contrat")
