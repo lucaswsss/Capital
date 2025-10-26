@@ -135,7 +135,23 @@ elif choice=="Par joueur":
     st.dataframe(joueur)
 
 elif choice=="Par contrat":
-    st.dataframe(df2)
+    tab1, tab2= st.tabs(["Contrats spéciaux", "Nombres"])
+
+    with tab1:
+        contrat = st.selectbox("Contrats", (df["Contrat"].unique()))
+        df_filtered = df[df["Contrat"]==contrat]
+        st.header("Scores les plus communs par contrat")
+        st.subheader("Meilleurs joueurs par contrat blablabla")
+        taux_par_joueur = (
+        df_filtered.groupby(["Joueur", "Contrat"])["Réussi"]
+        .mean()
+        .reset_index()
+        .sort_values(["Réussi"], ascending=[False])
+        )
+        st.table(taux_par_joueur.head(5))
+    with tab2:
+        st.header("Nombre les plus réussis ou marqués ?")
+        st.subheader("Meilleurs joueurs par nombre blablabla")
 
 elif choice=="Soirées":
     st.subheader("📅 Résumé des soirées")
@@ -143,6 +159,7 @@ elif choice=="Soirées":
         df.groupby("Date")["Réussi"].mean()
 
     )
+    Vainqueurs=df2[(df2["Phase"] =="F") & (df2["Classement_final"]==1)].set_index("Date")["Joueur"]
     df_soiree=(
         df2.groupby("Date")
         .agg(
@@ -151,6 +168,7 @@ elif choice=="Soirées":
         )
         )
     df_soiree["Taux de réussite"] = taux_par_soiree.values*100
+    df_soiree["Vainqueur"]=Vainqueurs
     styled_df = (
     df_soiree.style
     .format({
