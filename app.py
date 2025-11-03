@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # --- Configuration de la page ---
-st.set_page_config(page_title="🎯 Le Capital", layout="wide")
+st.set_page_config(page_title="🎯 Le Capital", layout="wide", page_icon="dcg.jpg")
 
 # --- Chargement des données ---
 @st.cache_data
