@@ -80,6 +80,8 @@ if choice=="Général":
 elif choice=="Par joueur":
 
     st.subheader("🏅 Analyse par joueur")
+    df25=df.copy()
+    df25.loc[df25["Tour"] > 17, "Tour"] = 17
     taux_joueur = (
         df.groupby(["Joueur", "Contrat"])["Réussi"]
         .mean()
@@ -87,7 +89,7 @@ elif choice=="Par joueur":
         .sort_values(["Joueur", "Réussi"], ascending=[True, False])
     )
     score_moyen_apres = (
-        df.groupby(["Tour","Joueur", "Contrat"])["Score_Après"]
+        df25.groupby(["Tour","Joueur", "Contrat"])["Score_Après"]
         .mean()
         .reset_index()
         .sort_values(["Tour","Joueur", "Score_Après"], ascending=[True,True, False])
