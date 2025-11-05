@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # --- Configuration de la page ---
 st.set_page_config(page_title="🎯 Le Capital", layout="wide", page_icon="dcg.jpg")
@@ -22,7 +23,7 @@ def load_data2():
 df = load_data1()
 df2 = load_data2()
 
-st.title("🎯 Darts Club des Gones - Capital 🎯")
+st.title("🎯 Darts Club des Gones - Capital")
 st.markdown("Visualisez vos performances et les statistiques globales des soirées !")
 
 # --- Filtres ---
@@ -142,9 +143,29 @@ elif choice=="Par contrat":
     tab1, tab2= st.tabs(["Contrats spéciaux", "Nombres"])
 
     with tab1:
-        contrat = st.selectbox("Contrats", (df["Contrat"].unique()))
+        contrat = st.selectbox("Contrats", (df[df["Type_Contrat"]=="Spécial" | df["Type_Contrat"]=="Points"]["Contrat"].unique()))
         df_filtered = df[df["Contrat"]==contrat]
         st.header("Scores les plus communs par contrat")
+        col1, col2 = st.columns(2)
+        col1met=df_filtered["Gain"].mean()
+        col1.metric("Gain moyen", f"{col1met:.1%}")
+        
+        scores_freq = (
+        df_filtered["Gain"]
+        .value_counts()
+        .reset_index()
+        .rename(columns={"index": "Score", "Score": "Occurrences"})
+        .sort_values("count")
+        )
+        col2met=scores_freq["Gain"][0]
+        col2.metric("Score le plus réalisé", f"{col2met:.0f}")
+        fig, ax = plt.subplots(figsize=(10, 5))
+
+        sns.barplot(data=scores_freq.head(20), x="Gain", y="count", ax=ax)
+        ax.set_title("Les scores les plus réalisés")
+        ax.set_xlabel("Score")
+        ax.set_ylabel("Nombre d'occurrences")
+        st.pyplot(fig)
         st.subheader("Meilleurs joueurs par contrat blablabla")
         taux_par_joueur = (
         df_filtered.groupby(["Joueur", "Contrat"])["Réussi"]
