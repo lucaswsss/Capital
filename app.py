@@ -143,32 +143,33 @@ elif choice=="Par contrat":
     tab1, tab2= st.tabs(["Contrats spéciaux", "Nombres"])
 
     with tab1:
-        contrat = st.selectbox("Contrats", (df[df["Type_Contrat"]=="Spécial" | df["Type_Contrat"]=="Points"]["Contrat"].unique()))
+        contrat = st.selectbox("Contrat",df[df["Type_Contrat"].isin(["Spécial", "Points"])]["Contrat"].unique())
         df_filtered = df[df["Contrat"]==contrat]
         st.header("Scores les plus communs par contrat")
         col1, col2 = st.columns(2)
-        col1met=df_filtered["Gain"].mean()
-        col1.metric("Gain moyen", f"{col1met:.1%}")
-        
+        col1met=df_filtered[df_filtered["Gain"]>0]["Gain"].mean()
+        col1.metric("Gain moyen", f"{col1met:.1f}")
+        df_filteredgain=df_filtered[df_filtered["Gain"]>0]
         scores_freq = (
-        df_filtered["Gain"]
-        .value_counts()
-        .reset_index()
-        .rename(columns={"index": "Score", "Score": "Occurrences"})
-        .sort_values("count")
+            df_filteredgain["Gain"]
+            .value_counts()
+            .reset_index()
+            .rename(columns={"Gain": "Gain", "count": "Occurrences"})
+            .sort_values("Occurrences", ascending=False)
         )
-        col2met=scores_freq["Gain"][0]
+        col2met = scores_freq["Gain"].iloc[0]
         col2.metric("Score le plus réalisé", f"{col2met:.0f}")
         fig, ax = plt.subplots(figsize=(10, 5))
-
-        sns.barplot(data=scores_freq.head(20), x="Gain", y="count", ax=ax)
-        ax.set_title("Les scores les plus réalisés")
-        ax.set_xlabel("Score")
-        ax.set_ylabel("Nombre d'occurrences")
+        sns.barplot(data=scores_freq.head(20), x="Gain", y="Occurrences", ax=ax, order=scores_freq["Gain"].head(20))
+        ax.set_title("Les scores les plus réalisés", fontsize=14)
+        ax.set_xlabel("Score", fontsize=12)
+        ax.set_ylabel("Nombre d'occurrences", fontsize=12)
         st.pyplot(fig)
-        st.subheader("Meilleurs joueurs par contrat blablabla")
+
+
+        st.subheader("Meilleurs joueurs pour ce contrat")
         taux_par_joueur = (
-        df_filtered.groupby(["Joueur", "Contrat"])["Réussi"]
+        df_filtered.groupby(["Joueur"])["Réussi"]
         .mean()
         .reset_index()
         .sort_values(["Réussi"], ascending=[False])
