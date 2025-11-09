@@ -78,6 +78,15 @@ if choice=="Général":
 
     st.pyplot(fig)
 
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.boxplot(data=df2, x="Classement_final", y="Score_final", ax=ax)
+    ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
+    ax.set_title("Répartition des scores en fonction du classement final", fontsize=14)
+    ax.set_xlabel("Classement final", fontsize=12)
+    ax.set_ylabel("Score final", fontsize=12)
+    ax.legend()
+    st.pyplot(fig)
+
 elif choice=="Par joueur":
 
     st.subheader("🏅 Analyse par joueur")
@@ -146,7 +155,7 @@ elif choice=="Par contrat":
         contrat = st.selectbox("Contrat",df[df["Type_Contrat"].isin(["Spécial", "Points"])]["Contrat"].unique())
         df_filtered = df[df["Contrat"]==contrat]
         st.header("Scores les plus communs par contrat")
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         col1met=df_filtered[df_filtered["Gain"]>0]["Gain"].mean()
         col1.metric("Gain moyen", f"{col1met:.1f}")
         df_filteredgain=df_filtered[df_filtered["Gain"]>0]
@@ -159,6 +168,8 @@ elif choice=="Par contrat":
         )
         col2met = scores_freq["Gain"].iloc[0]
         col2.metric("Score le plus réalisé", f"{col2met:.0f}")
+        col3met = scores_freq["Gain"].max()
+        col3.metric("Plus gros score", f"{col3met:.0f}")
         fig, ax = plt.subplots(figsize=(10, 5))
         sns.barplot(data=scores_freq.head(20), x="Gain", y="Occurrences", ax=ax, order=scores_freq["Gain"].head(20))
         ax.set_title("Les scores les plus réalisés", fontsize=14)
