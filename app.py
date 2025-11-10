@@ -78,10 +78,11 @@ if choice=="Général":
 
     st.pyplot(fig)
 
+    st.subheader("Réparition des scores en fonction du classement final")
+
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.boxplot(data=df2, x="Classement_final", y="Score_final", ax=ax)
     ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
-    ax.set_title("Répartition des scores en fonction du classement final", fontsize=14)
     ax.set_xlabel("Classement final", fontsize=12)
     ax.set_ylabel("Score final", fontsize=12)
     ax.legend()
@@ -187,8 +188,35 @@ elif choice=="Par contrat":
         )
         st.table(taux_par_joueur.head(5))
     with tab2:
-        st.header("Nombre les plus réussis ou marqués ?")
-        st.subheader("Meilleurs joueurs par nombre blablabla")
+        dftab2=df[df["Type_Contrat"]=="Nombre"]
+        dftab2.loc[dftab2["Nb"].astype(float) < 0, "Nb"] = 0
+        col1, col2 = st.columns(2)
+        col1met=dftab2["Réussi"].mean()
+        col1.metric("Taux de réussite global aux nombres", f"{col1met:.1%}")
+        col2met=dftab2["Nb"].mean()
+        col2.metric("Score moyen", f"{col2met:.1f}")
+        st.subheader("Nombre les plus touchés")
+        nb_nombres = (
+            dftab2["Nb"]
+            .groupby(["Contrat"])
+            .mean()
+            .reset_index()
+            .rename(columns={"Contrat": "Nombre", "Nb": "mean"})
+            .sort_values("mean", ascending=False)
+        )
+        fig, ax = plt.subplots(figsize=(10, 5))
+        sns.barplot(data=nb_nombres, x="Nombre", y="mean", ax=ax, order=nb_nombres["Nombre"])
+        ax.set_xlabel("Nombres", fontsize=12)
+        ax.set_ylabel("Moyenne", fontsize=12)
+        st.pyplot(fig)
+        st.subheader("Meilleurs joueurs sur les nombres")
+        taux_par_joueur = (
+        dftab2.groupby(["Joueur"])["Réussi"]
+        .mean()
+        .reset_index()
+        .sort_values(["Réussi"], ascending=[False])
+        )
+        st.table(taux_par_joueur.head(5))
 
 elif choice=="Soirées":
     st.subheader("📅 Résumé des soirées")
