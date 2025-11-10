@@ -10,7 +10,7 @@ st.set_page_config(page_title="🎯 Le Capital", layout="wide", page_icon="dcg.j
 # --- Chargement des données ---
 @st.cache_data
 def load_data1():
-    df = pd.read_csv("data/capital.csv")
+    df = pd.read_csv("data/capital.csv", decimal=",")
     # Conversion de "Réussi" en numérique si besoin
     return df
 
@@ -173,6 +173,8 @@ elif choice=="Par contrat":
         col3.metric("Plus gros score", f"{col3met:.0f}")
         fig, ax = plt.subplots(figsize=(10, 5))
         sns.barplot(data=scores_freq.head(20), x="Gain", y="Occurrences", ax=ax, order=scores_freq["Gain"].head(20))
+        for container in ax.containers:
+            ax.bar_label(container, fmt="%d", label_type="edge", padding=3)
         ax.set_title("Les scores les plus réalisés", fontsize=14)
         ax.set_xlabel("Score", fontsize=12)
         ax.set_ylabel("Nombre d'occurrences", fontsize=12)
@@ -197,19 +199,20 @@ elif choice=="Par contrat":
         col2.metric("Score moyen", f"{col2met:.1f}")
         st.subheader("Nombre les plus touchés")
         nb_nombres = (
-            dftab2["Nb"]
-            .groupby(["Contrat"])
+            dftab2.groupby(["Contrat"])["Nb"]
             .mean()
             .reset_index()
             .rename(columns={"Contrat": "Nombre", "Nb": "mean"})
             .sort_values("mean", ascending=False)
         )
         fig, ax = plt.subplots(figsize=(10, 5))
-        sns.barplot(data=nb_nombres, x="Nombre", y="mean", ax=ax, order=nb_nombres["Nombre"])
+        sns.barplot(data=nb_nombres, x="Nombre", y="mean", ax=ax, order=[20,19,18,17,16,15,14,13])
+        for container in ax.containers:
+            ax.bar_label(container, fmt="%.2f", label_type="edge", padding=3)
         ax.set_xlabel("Nombres", fontsize=12)
         ax.set_ylabel("Moyenne", fontsize=12)
         st.pyplot(fig)
-        st.subheader("Meilleurs joueurs sur les nombres")
+        st.subheader("Meilleurs joueurs sur les nombres (% validation)")
         taux_par_joueur = (
         dftab2.groupby(["Joueur"])["Réussi"]
         .mean()
@@ -217,6 +220,33 @@ elif choice=="Par contrat":
         .sort_values(["Réussi"], ascending=[False])
         )
         st.table(taux_par_joueur.head(5))
+        st.subheader("Meilleurs joueurs sur les nombres (moyenne)")
+        taux_par_joueur2 = (
+        dftab2.groupby(["Joueur"])["Nb"]
+        .mean()
+        .reset_index()
+        .sort_values(["Nb"], ascending=[False])
+        )
+        st.table(taux_par_joueur2.head(5))
+
+        joueur_sel = st.selectbox("Stats par joueur :", sorted(df["Joueur"].unique()))
+        df_filt=dftab2[dftab2["Joueur"]==joueur_sel]
+        nb_nombres_par_joueur = (
+            df_filt.groupby(["Contrat"])["Nb"]
+            .mean()
+            .reset_index()
+            .rename(columns={"Contrat": "Nombre", "Nb": "mean"})
+            .sort_values("mean", ascending=False)
+        )
+        score_moyen=nb_nombres_par_joueur["mean"].mean()
+        fig, ax = plt.subplots(figsize=(10, 5))
+        sns.barplot(data=nb_nombres_par_joueur, x="Nombre", y="mean", ax=ax, order=[20,19,18,17,16,15,14,13])
+        ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
+        for container in ax.containers:
+            ax.bar_label(container, fmt="%.2f", label_type="edge", padding=3)
+        ax.set_xlabel("Nombres", fontsize=12)
+        ax.set_ylabel("Moyenne", fontsize=12)
+        st.pyplot(fig)
 
 elif choice=="Soirées":
     st.subheader("📅 Résumé des soirées")
