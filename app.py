@@ -30,7 +30,7 @@ st.markdown("Visualisez vos performances et les statistiques globales des soiré
 
 st.sidebar.title("Navigateur")
 choice = st.sidebar.radio("Sélectionnez une section", ["Général", 
-                                                      "Par joueur","Par contrat","Soirées","Données" ]) 
+                                                      "Par joueur","Par contrat","Soirées","Records","Données" ]) 
 #st.sidebar.header("🧮 Filtres")
 #joueurs_sel = st.sidebar.multiselect("Sélectionnez les joueurs :", sorted(df["Joueur"].unique()), default=df["Joueur"].unique())
 #contrats_sel = st.sidebar.multiselect("Sélectionnez les contrats :", sorted(df["Contrat"].unique()), default=df["Contrat"].unique())
@@ -84,6 +84,27 @@ if choice=="Général":
     sns.boxplot(data=df2, x="Classement_final", y="Score_final", ax=ax)
     ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
     ax.set_xlabel("Classement final", fontsize=12)
+    ax.set_ylabel("Score final", fontsize=12)
+    ax.legend()
+    st.pyplot(fig)
+
+    
+    st.subheader("Réparition des scores en fonction de la cible")
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.boxplot(data=df2, x="Cible", y="Score_final", ax=ax)
+    ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
+    ax.set_xlabel("Cible", fontsize=12)
+    ax.set_ylabel("Score final", fontsize=12)
+    ax.legend()
+    st.pyplot(fig)
+
+    st.subheader("Réparition des scores en fonction de la partie")
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.boxplot(data=df2, x="Phase", y="Score_final", ax=ax)
+    ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
+    ax.set_xlabel("Partie", fontsize=12)
     ax.set_ylabel("Score final", fontsize=12)
     ax.legend()
     st.pyplot(fig)
@@ -296,6 +317,23 @@ elif choice=="Soirées":
 )
 
     st.table(styled_df)
+
+elif choice=="Records":
+    df["Division"] = (df["Réussi"] == 0).astype(int)
+    df_divisions = (
+        df.groupby(["Partie_ID", "Joueur"])["Division"]
+        .sum()
+        .reset_index()
+        .rename(columns={"Division": "Nb_Divisions"})
+        .sort_values("Nb_Divisions", ascending=True)
+    )
+    df_divpartie=(
+        df_divisions.groupby("Partie_ID")["Nb_Divisions"]
+        .sum()
+
+    )
+
+    st.table(df_divisions.head(10))
 
 
 elif choice=="Données" :
