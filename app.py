@@ -26,10 +26,19 @@ df2 = load_data2()
 st.title("🎯 Darts Club des Gones - Capital")
 st.markdown("Visualisez vos performances et les statistiques globales des soirées !")
 
-df2["Points"]=5-df2["Classement_final"]
+#df2["Points"]=5-df2["Classement_final"]
 df2["Session"]=df2["Date"].apply(lambda x: "Rentrée 2025" if x < "2025-11-01" else "Automne 2025")
+finales = pd.DataFrame({
+    "Session": ["Rentrée 2025", "Automne 2025"],
+    "Finale": ["2025-10-29","2025-12-17"]
+})
+finales["Finale"] = pd.to_datetime(finales["Finale"])
+#finales=finales.rename(columns={"Date":"Finale"})
+df2=df2.merge(finales, on="Session", how="left")
+df2["Points"]=df2.apply(lambda x: (5 - x["Classement_final"])*2 if x["Date"]==x["Finale"] else 5-x["Classement_final"],axis=1)
 
-
+if "session_radio_tab2" not in st.session_state:
+    st.session_state["session_radio_tab2"] = "Automne 2025"
 # --- Filtres ---
 
 st.sidebar.title("Navigateur")
@@ -116,8 +125,7 @@ if choice=="Général":
         st.pyplot(fig)
 
     with tab2 :
-        session = st.radio("Session", ["Rentrée 2025", 
-                                                      "Automne 2025"])
+        session = st.selectbox("Session", ["Automne 2025", "Rentrée 2025"])
         df2clas=df2[df2["Session"] == session]
         Classement=(
             df2clas.groupby(["Joueur"])["Points"]
@@ -368,6 +376,5 @@ elif choice=="Records":
 
 
 elif choice=="Données" :
-    # --- Données brutes ---
     st.subheader("📋 Données")
-    st.dataframe(df)
+    st.dataframe(df2)
