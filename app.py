@@ -26,6 +26,8 @@ df2 = load_data2()
 st.title("🎯 Darts Club des Gones - Capital")
 st.markdown("Visualisez vos performances et les statistiques globales des soirées !")
 
+df2["Points"]=5-df2["Classement_final"]
+
 # --- Filtres ---
 
 st.sidebar.title("Navigateur")
@@ -112,7 +114,13 @@ if choice=="Général":
         st.pyplot(fig)
 
     with tab2 :
-
+        Classement=(
+            df2.groupby(["Joueur"])["Points"]
+            .sum()
+            .sort_values(ascending=False)
+            .reset_index()
+        )
+        Classement.index=range(1, len(Classement)+1)
         st.table(Classement)
 
 elif choice=="Par joueur":
