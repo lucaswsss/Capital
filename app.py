@@ -287,7 +287,7 @@ elif choice=="Par contrat":
         .reset_index()
         .sort_values(["Réussi"], ascending=[False])
         )
-        st.table(taux_par_joueur.head(5))
+        st.table(taux_par_joueur.head(10))
         st.subheader("Meilleurs joueurs sur les nombres (moyenne)")
         taux_par_joueur2 = (
         dftab2.groupby(["Joueur"])["Nb"]
@@ -295,7 +295,7 @@ elif choice=="Par contrat":
         .reset_index()
         .sort_values(["Nb"], ascending=[False])
         )
-        st.table(taux_par_joueur2.head(5))
+        st.table(taux_par_joueur2.head(10))
 
         joueur_sel = st.selectbox("Stats par joueur :", sorted(df["Joueur"].unique()))
         df_filt=dftab2[dftab2["Joueur"]==joueur_sel]
@@ -315,6 +315,19 @@ elif choice=="Par contrat":
         ax.set_xlabel("Nombres", fontsize=12)
         ax.set_ylabel("Moyenne", fontsize=12)
         st.pyplot(fig)
+
+        taux_par_joueur2 = (
+                    dftab2.groupby(["Joueur", "Contrat"])["Nb"]
+                    .mean()
+                    .reset_index()
+                    .sort_values(["Nb"], ascending=[False])
+                    )
+
+        for i in range(20,12,-1):
+                    st.subheader(f"Meilleurs joueurs au {i}")
+                    dfnb=taux_par_joueur2[taux_par_joueur2["Contrat"]==str(i)]
+                    st.table(dfnb.head(10))
+
 
 elif choice=="Soirées":
     st.subheader("📅 Résumé des soirées")
@@ -371,8 +384,8 @@ elif choice=="Records":
         .sum()
 
     )
-
-    st.table(df_divisions.head(10))
+    st.write("Travaux")
+    #st.table(df_divisions.head(10))
 
 
 elif choice=="Données" :
