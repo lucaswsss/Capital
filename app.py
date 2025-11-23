@@ -41,73 +41,79 @@ choice = st.sidebar.radio("Sélectionnez une section", ["Général",
 
 if choice=="Général":
 
-    # --- Statistiques globales ---
-    st.subheader("📈 Statistiques globales")
-    taux_reussite = df["Réussi"].mean()
-    score_moyen = df2["Score_final"].mean()
-    score_vainqueur=df2[df2["Classement_final"]==1]["Score_final"].mean()
+    tab1,tab2=st.tabs(["Statistiques globales", "Classement"])
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Taux de réussite global des contrats (nombres inclus)", f"{taux_reussite:.1%}")
-    col2.metric("Score final moyen", f"{score_moyen:.0f}")
-    col3.metric("Score final moyen pour un vainqueur", f"{score_vainqueur:.0f}")
+    with tab1 :
+        st.subheader("📈 Statistiques globales")
+        taux_reussite = df["Réussi"].mean()
+        score_moyen = df2["Score_final"].mean()
+        score_vainqueur=df2[df2["Classement_final"]==1]["Score_final"].mean()
 
-    # --- Taux de réussite par contrat ---
-    st.subheader("🎯 Taux de réussite par contrat")
-    taux_par_contrat = (
-        df.groupby("Contrat")["Réussi"]
-        .mean()
-        .reset_index()
-        .sort_values("Réussi", ascending=False)
-    )
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Taux de réussite global des contrats (nombres inclus)", f"{taux_reussite:.1%}")
+        col2.metric("Score final moyen", f"{score_moyen:.0f}")
+        col3.metric("Score final moyen pour un vainqueur", f"{score_vainqueur:.0f}")
 
-    fig, ax = plt.subplots(figsize=(10, 4))
-    bars=ax.bar(taux_par_contrat["Contrat"], taux_par_contrat["Réussi"], color="skyblue")
-    ax.set_ylabel("Taux de réussite")
-    ax.set_xlabel("Contrat")
-    ax.set_ylim(0, 1)
-    plt.xticks(rotation=45)
-    for bar in bars:
-        height = bar.get_height()
-        ax.text(
-            bar.get_x() + bar.get_width() / 2,  # position horizontale (milieu de la barre)
-            height + 0.02,                      # position verticale (au-dessus)
-            f"{height:.1%}",                    # texte (format pourcentage)
-            ha="center", va="bottom", fontsize=9
+        # --- Taux de réussite par contrat ---
+        st.subheader("🎯 Taux de réussite par contrat")
+        taux_par_contrat = (
+            df.groupby("Contrat")["Réussi"]
+            .mean()
+            .reset_index()
+            .sort_values("Réussi", ascending=False)
         )
 
-    st.pyplot(fig)
+        fig, ax = plt.subplots(figsize=(10, 4))
+        bars=ax.bar(taux_par_contrat["Contrat"], taux_par_contrat["Réussi"], color="skyblue")
+        ax.set_ylabel("Taux de réussite")
+        ax.set_xlabel("Contrat")
+        ax.set_ylim(0, 1)
+        plt.xticks(rotation=45)
+        for bar in bars:
+            height = bar.get_height()
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,  # position horizontale (milieu de la barre)
+                height + 0.02,                      # position verticale (au-dessus)
+                f"{height:.1%}",                    # texte (format pourcentage)
+                ha="center", va="bottom", fontsize=9
+            )
 
-    st.subheader("Réparition des scores en fonction du classement final")
+        st.pyplot(fig)
 
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.boxplot(data=df2, x="Classement_final", y="Score_final", ax=ax)
-    ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
-    ax.set_xlabel("Classement final", fontsize=12)
-    ax.set_ylabel("Score final", fontsize=12)
-    ax.legend()
-    st.pyplot(fig)
+        st.subheader("Réparition des scores en fonction du classement final")
 
-    
-    st.subheader("Réparition des scores en fonction de la cible")
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.boxplot(data=df2, x="Classement_final", y="Score_final", ax=ax)
+        ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
+        ax.set_xlabel("Classement final", fontsize=12)
+        ax.set_ylabel("Score final", fontsize=12)
+        ax.legend()
+        st.pyplot(fig)
 
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.boxplot(data=df2, x="Cible", y="Score_final", ax=ax)
-    ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
-    ax.set_xlabel("Cible", fontsize=12)
-    ax.set_ylabel("Score final", fontsize=12)
-    ax.legend()
-    st.pyplot(fig)
+        
+        st.subheader("Réparition des scores en fonction de la cible")
 
-    st.subheader("Réparition des scores en fonction de la partie")
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.boxplot(data=df2, x="Cible", y="Score_final", ax=ax)
+        ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
+        ax.set_xlabel("Cible", fontsize=12)
+        ax.set_ylabel("Score final", fontsize=12)
+        ax.legend()
+        st.pyplot(fig)
 
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.boxplot(data=df2, x="Phase", y="Score_final", ax=ax)
-    ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
-    ax.set_xlabel("Partie", fontsize=12)
-    ax.set_ylabel("Score final", fontsize=12)
-    ax.legend()
-    st.pyplot(fig)
+        st.subheader("Réparition des scores en fonction de la partie")
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.boxplot(data=df2, x="Phase", y="Score_final", ax=ax)
+        ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
+        ax.set_xlabel("Partie", fontsize=12)
+        ax.set_ylabel("Score final", fontsize=12)
+        ax.legend()
+        st.pyplot(fig)
+
+    with tab2 :
+
+        st.table(Classement)
 
 elif choice=="Par joueur":
     tab1, tab2= st.tabs(["Analyse par joueur", "Meilleurs joueurs"])
@@ -317,6 +323,18 @@ elif choice=="Soirées":
 )
 
     st.table(styled_df)
+
+    st.subheader("Evolution des performances")
+    fig, ax1 = plt.subplots(figsize=(10, 4))
+    ax1.plot(df_soiree["Score_moyen"], marker="o", linewidth=2, color="m")
+    ax1.set_ylabel("Score moyen", color="m")
+    ax1.set_xlabel("Date")
+
+    ax2=ax1.twinx()
+    ax2.plot(df_soiree["Taux de réussite"], marker="x", linewidth=2, color="y")
+    ax2.set_ylabel("Taux de réussite", color="y")
+    fig.tight_layout()
+    st.pyplot(fig)
 
 elif choice=="Records":
     df["Division"] = (df["Réussi"] == 0).astype(int)
