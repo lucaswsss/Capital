@@ -259,15 +259,25 @@ elif choice=="Par contrat":
         ax.set_ylabel("Nombre d'occurrences", fontsize=12)
         st.pyplot(fig)
 
+        if contrat=="Capital":
+            st.subheader("Meilleurs moyennes au capital")
+            taux_par_joueur = (
+            df_filtered.groupby(["Joueur"])["Gain"]
+            .mean()
+            .reset_index()
+            .sort_values(["Gain"], ascending=[False])
+            )
+            st.table(taux_par_joueur.head(20))
 
-        st.subheader("Meilleurs joueurs pour ce contrat")
-        taux_par_joueur = (
-        df_filtered.groupby(["Joueur"])["Réussi"]
-        .mean()
-        .reset_index()
-        .sort_values(["Réussi"], ascending=[False])
-        )
-        st.table(taux_par_joueur.head(5))
+        else :
+            st.subheader("Meilleurs joueurs pour ce contrat")
+            taux_par_joueur = (
+            df_filtered.groupby(["Joueur"])["Réussi"]
+            .mean()
+            .reset_index()
+            .sort_values(["Réussi"], ascending=[False])
+            )
+            st.table(taux_par_joueur.head(10))
     with tab2:
         dftab2=df[df["Type_Contrat"]=="Nombre"]
         dftab2.loc[dftab2["Nb"].astype(float) < 0, "Nb"] = 0
