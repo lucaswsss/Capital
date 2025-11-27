@@ -124,6 +124,17 @@ if choice=="Général":
         ax.legend()
         st.pyplot(fig)
 
+        st.subheader("Réparition des scores de l'ordre de passage")
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.boxplot(data=df2, x="Ordre", y="Score_final", ax=ax)
+        ax.axhline(score_moyen, color="red", linestyle="--", linewidth=2, label=f"Moyenne ({score_moyen:.1f})")
+        ax.set_xlabel("Ordre", fontsize=12)
+        ax.set_ylabel("Score final", fontsize=12)
+        ax.legend()
+        st.pyplot(fig)
+
+
     with tab2 :
         session = st.selectbox("Session", ["Automne 2025", "Rentrée 2025"])
         df2clas=df2[df2["Session"] == session]
@@ -384,7 +395,10 @@ elif choice=="Records":
         .sum()
 
     )
+
+
     st.write("Travaux")
+    
     #st.table(df_divisions.head(10))
 
 
