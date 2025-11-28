@@ -24,7 +24,7 @@ df = load_data1()
 df2 = load_data2()
 
 st.title("🎯 Darts Club des Gones - Capital")
-st.markdown("Visualisez vos performances et les statistiques globales des soirées !")
+st.markdown("Visualisez vos performances et les statistiques globales des soirées ! (voir menu à gauche)")
 
 #df2["Points"]=5-df2["Classement_final"]
 df2["Session"]=df2["Date"].apply(lambda x: "Rentrée 2025" if x < "2025-11-01" else "Automne 2025")
@@ -43,7 +43,7 @@ if "session_radio_tab2" not in st.session_state:
 
 st.sidebar.title("Navigateur")
 choice = st.sidebar.radio("Sélectionnez une section", ["Général", 
-                                                      "Par joueur","Par contrat","Soirées","Records","Données" ]) 
+                                                      "Par joueur","Par contrat","Soirées","Divers","Données" ]) 
 #st.sidebar.header("🧮 Filtres")
 #joueurs_sel = st.sidebar.multiselect("Sélectionnez les joueurs :", sorted(df["Joueur"].unique()), default=df["Joueur"].unique())
 #contrats_sel = st.sidebar.multiselect("Sélectionnez les contrats :", sorted(df["Contrat"].unique()), default=df["Contrat"].unique())
@@ -391,7 +391,7 @@ elif choice=="Soirées":
     fig.tight_layout()
     st.pyplot(fig)
 
-elif choice=="Records":
+elif choice=="Divers":
     df["Division"] = (df["Réussi"] == 0).astype(int)
     df_divisions = (
         df.groupby(["Partie_ID", "Joueur"])["Division"]
@@ -407,7 +407,7 @@ elif choice=="Records":
     )
 
 
-    st.write("Travaux")
+    st.write("En travaux...")
     
     #st.table(df_divisions.head(10))
 
