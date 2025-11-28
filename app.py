@@ -32,7 +32,7 @@ finales = pd.DataFrame({
     "Session": ["Rentrée 2025", "Automne 2025"],
     "Finale": ["2025-10-29","2025-12-17"]
 })
-finales["Finale"] = pd.to_datetime(finales["Finale"])
+#finales["Finale"] = pd.to_datetime(finales["Finale"])
 #finales=finales.rename(columns={"Date":"Finale"})
 df2=df2.merge(finales, on="Session", how="left")
 df2["Points"]=df2.apply(lambda x: (5 - x["Classement_final"])*2 if x["Date"]==x["Finale"] else 5-x["Classement_final"],axis=1)
