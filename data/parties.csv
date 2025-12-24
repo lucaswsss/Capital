@@ -3,7 +3,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 1,2025-10-08,P1,Manon,27,4,1,2
 1,2025-10-08,P1,Aurel,124,1,1,3
 1,2025-10-08,P1,Antoine,28,3,1,4
-2,2025-10-08,P1,Quentin,78,1,2,1
+2,2025-10-08,P1,Q2,78,1,2,1
 2,2025-10-08,P1,Remi,60,2,2,2
 2,2025-10-08,P1,Béné,12,3,2,3
 2,2025-10-08,P1,Hepa,10,4,2,4
@@ -24,7 +24,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 6,2025-10-08,P2,Jeremy,116,2,1,3
 6,2025-10-08,P2,Aurel,70,3,1,4
 7,2025-10-08,P2,Lolo,39,4,2,1
-7,2025-10-08,P2,Quentin,218,1,2,2
+7,2025-10-08,P2,Q2,218,1,2,2
 7,2025-10-08,P2,Carré,93,2,2,3
 7,2025-10-08,P2,Q,45,3,2,4
 8,2025-10-08,P2,Stef,206,1,3,1
@@ -43,7 +43,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 11,2025-10-08,DF,Matthieu,14,4,1,2
 11,2025-10-08,DF,Carré,57,1,1,3
 11,2025-10-08,DF,Hepa,27,3,1,4
-12,2025-10-08,DF,Quentin,59,2,2,1
+12,2025-10-08,DF,Q2,59,2,2,1
 12,2025-10-08,DF,Lucas,24,3,2,2
 12,2025-10-08,DF,Toussaint,23,4,2,3
 12,2025-10-08,DF,Aurel,111,1,2,4
@@ -73,7 +73,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 18,2025-10-15,P1,Lucas,116,3,2,3
 18,2025-10-15,P1,V6,34,4,2,4
 19,2025-10-15,P1,Thib,4,4,3,1
-19,2025-10-15,P1,Quentin,21,3,3,2
+19,2025-10-15,P1,Q2,21,3,3,2
 19,2025-10-15,P1,Manu,66,2,3,3
 19,2025-10-15,P1,Albert,184,1,3,4
 20,2025-10-15,P1,Q,85,2,4,1
@@ -89,7 +89,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 22,2025-10-15,P2,Q,51,3,2,3
 22,2025-10-15,P2,Evan,133,2,2,4
 23,2025-10-15,P2,Aurel,42,3,3,1
-23,2025-10-15,P2,Quentin,102,1,3,2
+23,2025-10-15,P2,Q2,102,1,3,2
 23,2025-10-15,P2,Lucas,57,2,3,3
 23,2025-10-15,P2,Hepa,8,4,3,4
 24,2025-10-15,P2,Thib,20,2,4,1
@@ -109,7 +109,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 27,2025-10-15,DF,Toussaint,78,2,3,3
 27,2025-10-15,DF,Stef,95,1,3,4
 28,2025-10-15,DF,Manu,28,2,4,1
-28,2025-10-15,DF,Quentin,13,4,4,2
+28,2025-10-15,DF,Q2,13,4,4,2
 28,2025-10-15,DF,Evan,23,3,4,3
 28,2025-10-15,DF,Hepa,53,1,4,4
 29,2025-10-15,F,Stef,235,1,1,1
@@ -125,7 +125,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 31,2025-10-22,P1,Celestin,36,4,2,3
 31,2025-10-22,P1,Manu,141,1,2,4
 32,2025-10-22,P1,Béné,27,2,3,1
-32,2025-10-22,P1,Quentin,49,1,3,2
+32,2025-10-22,P1,Q2,49,1,3,2
 32,2025-10-22,P1,V6,13,3,3,3
 32,2025-10-22,P1,Jeremy,8,4,3,4
 33,2025-10-22,P1,Lolo,104,2,4,1
@@ -141,7 +141,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 35,2025-10-22,P2,Mat,274,1,1,3
 35,2025-10-22,P2,Evan,42,4,1,4
 36,2025-10-22,P2,Lolo,31,3,2,1
-36,2025-10-22,P2,Quentin,87,2,2,2
+36,2025-10-22,P2,Q2,87,2,2,2
 36,2025-10-22,P2,Hepa,26,4,2,3
 36,2025-10-22,P2,Stef,233,1,2,4
 37,2025-10-22,P2,Toussaint,52,1,3,1
@@ -165,7 +165,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 41,2025-10-22,DF,Mat,88,2,2,3
 41,2025-10-22,DF,Celestin,91,1,2,4
 42,2025-10-22,DF,Lolo,180,2,3,1
-42,2025-10-22,DF,Quentin,153,3,3,2
+42,2025-10-22,DF,Q2,153,3,3,2
 42,2025-10-22,DF,V6,0,4,3,3
 42,2025-10-22,DF,Antoine,209,1,3,4
 43,2025-10-22,DF,Geoffrey,13,4,4,1
@@ -245,7 +245,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 61,2025-10-29,F,Hepa,19,4,1,5
 62,2025-11-05,P1,Manu,43,1,1,1
 62,2025-11-05,P1,Lucas,37,2,1,2
-62,2025-11-05,P1,Quentin,8,3,1,3
+62,2025-11-05,P1,Q2,8,3,1,3
 62,2025-11-05,P1,Jeanne,7,4,1,4
 63,2025-11-05,P1,Stef,110,1,2,1
 63,2025-11-05,P1,Lolo,49,2,2,2
@@ -268,7 +268,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 67,2025-11-05,P2,Benoit,198,1,2,3
 67,2025-11-05,P2,Jeremy,52,3,2,4
 68,2025-11-05,P2,Thib,59,3,3,1
-68,2025-11-05,P2,Quentin,73,2,3,2
+68,2025-11-05,P2,Q2,73,2,3,2
 68,2025-11-05,P2,Juliette,1,4,3,3
 68,2025-11-05,P2,Hepa,249,1,3,4
 69,2025-11-05,P2,V6,2,4,4,1
@@ -287,7 +287,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 72,2025-11-05,DF,Q,2,4,3,2
 72,2025-11-05,DF,Jeanne,16,3,3,3
 72,2025-11-05,DF,Jeremy,170,1,3,4
-73,2025-11-05,DF,Quentin,50,3,4,1
+73,2025-11-05,DF,Q2,50,3,4,1
 73,2025-11-05,DF,Antoine,109,2,4,2
 73,2025-11-05,DF,Benoit,47,4,4,3
 73,2025-11-05,DF,Aurel,121,1,4,4
@@ -308,7 +308,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 77,2025-11-12,P1,Q,50,1,3,3
 77,2025-11-12,P1,Manon,0,3,3,4
 78,2025-11-12,P1,Albert,111,1,4,1
-78,2025-11-12,P1,Quentin,94,2,4,2
+78,2025-11-12,P1,Q2,94,2,4,2
 78,2025-11-12,P1,Emma,2,4,4,3
 78,2025-11-12,P1,Hepa,73,3,4,4
 79,2025-11-12,P1,Lolo,42,2,5,1
@@ -320,7 +320,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 80,2025-11-12,P2,Jeremy,104,3,1,3
 80,2025-11-12,P2,Aurel,172,1,1,4
 81,2025-11-12,P2,Lucas,76,3,2,1
-81,2025-11-12,P2,Quentin,43,4,2,2
+81,2025-11-12,P2,Q2,43,4,2,2
 81,2025-11-12,P2,Q,143,1,2,3
 81,2025-11-12,P2,Remi_bis,87,2,2,4
 82,2025-11-12,P2,Lolo,11,3,3,1
@@ -335,7 +335,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 84,2025-11-12,P2,Béné,36,1,5,2
 84,2025-11-12,P2,V6,4,3,5,3
 84,2025-11-12,P2,Sharan,0,4,5,4
-85,2025-11-12,DF,Quentin,42,2,1,1
+85,2025-11-12,DF,Q2,42,2,1,1
 85,2025-11-12,DF,Toussaint,68,1,1,2
 85,2025-11-12,DF,Q,24,3,1,3
 85,2025-11-12,DF,Emma,10,4,1,4
@@ -377,7 +377,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 93,2025-11-19,P1,Flo,283,1,3,5
 94,2025-11-19,P1,Lucas,88,5,4,1
 94,2025-11-19,P1,Toussaint,161,4,4,2
-94,2025-11-19,P1,Quentin,220,1,4,3
+94,2025-11-19,P1,Q2,220,1,4,3
 94,2025-11-19,P1,Clément,182,3,4,4
 94,2025-11-19,P1,Jeremy,202,2,4,5
 95,2025-11-19,P1,Lolo,66,1,5,1
@@ -387,7 +387,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 96,2025-11-19,P2,Lolo,27,3,1,1
 96,2025-11-19,P2,Manu,154,2,1,2
 96,2025-11-19,P2,Leo,0,5,1,3
-96,2025-11-19,P2,Quentin,0,4,1,4
+96,2025-11-19,P2,Q2,0,4,1,4
 96,2025-11-19,P2,Flo,501,1,1,5
 97,2025-11-19,P2,Stef,119,2,2,1
 97,2025-11-19,P2,Paul,3,5,2,2
@@ -411,7 +411,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 100,2025-11-19,P2,Michoux,2,5,5,5
 101,2025-11-19,DF,Albert,150,1,1,1
 101,2025-11-19,DF,Evan,75,3,1,2
-101,2025-11-19,DF,Quentin,40,4,1,3
+101,2025-11-19,DF,Q2,40,4,1,3
 101,2025-11-19,DF,Clément,11,5,1,4
 101,2025-11-19,DF,Jeremy,143,2,1,5
 102,2025-11-19,DF,Lucas,145,1,2,1
@@ -447,7 +447,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 108,2025-11-26,P1,Benoit,113,3,2,3
 108,2025-11-26,P1,Gino,27,4,2,4
 109,2025-11-26,P1,Q,88,2,3,1
-109,2025-11-26,P1,Quentin,40,4,3,2
+109,2025-11-26,P1,Q2,40,4,3,2
 109,2025-11-26,P1,Leo,66,3,3,3
 109,2025-11-26,P1,Antoine,200,1,3,4
 110,2025-11-26,P1,Manu,166,1,4,1
@@ -474,7 +474,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 114,2025-11-26,P2,Benoit,80,2,3,4
 115,2025-11-26,P2,Thib,35,3,4,1
 115,2025-11-26,P2,V6,4,4,4,2
-115,2025-11-26,P2,Quentin,106,1,4,3
+115,2025-11-26,P2,Q2,106,1,4,3
 115,2025-11-26,P2,Manon,59,2,4,4
 116,2025-11-26,P2,Gino,25,3,5,1
 116,2025-11-26,P2,Marlène,86,1,5,2
@@ -495,7 +495,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 119,2025-11-26,DF,Lucas,163,1,3,3
 119,2025-11-26,DF,Jeremy,75,2,3,4
 120,2025-11-26,DF,Leo,46,2,4,1
-120,2025-11-26,DF,Quentin,28,4,4,2
+120,2025-11-26,DF,Q2,28,4,4,2
 120,2025-11-26,DF,Toussaint,83,1,4,3
 120,2025-11-26,DF,Manon,31,3,4,4
 121,2025-11-26,DF,Stef,97,1,5,1
@@ -524,7 +524,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 125,2025-12-03,P1,Mauricio,23,4,3,4
 125,2025-12-03,P1,Antoine,96,2,3,5
 126,2025-12-03,P1,Lolo,127,1,4,1
-126,2025-12-03,P1,Quentin,16,2,4,2
+126,2025-12-03,P1,Q2,16,2,4,2
 126,2025-12-03,P1,Loulou,13,3,4,3
 126,2025-12-03,P1,Manon,9,4,4,4
 127,2025-12-03,P2,Lolo,87,3,1,1
@@ -533,7 +533,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 127,2025-12-03,P2,Q,27,5,1,4
 127,2025-12-03,P2,Jeremy,238,2,1,5
 128,2025-12-03,P2,Lucas,0,5,2,1
-128,2025-12-03,P2,Quentin,14,3,2,2
+128,2025-12-03,P2,Q2,14,3,2,2
 128,2025-12-03,P2,Stef,127,1,2,3
 128,2025-12-03,P2,Thib,4,4,2,4
 128,2025-12-03,P2,Antoine,26,2,2,5
@@ -560,7 +560,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 133,2025-12-03,DF,Lolo,27,4,3,3
 133,2025-12-03,DF,Emma,3,5,3,4
 133,2025-12-03,DF,Antoine,156,2,3,5
-134,2025-12-03,DF,Quentin,91,3,4,1
+134,2025-12-03,DF,Q2,91,3,4,1
 134,2025-12-03,DF,Albert,146,2,4,2
 134,2025-12-03,DF,Gauthier,34,4,4,3
 134,2025-12-03,DF,Q,196,1,4,4
@@ -592,7 +592,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 140,2025-12-10,P1,Thib,2,5,5,1
 140,2025-12-10,P1,Albert,100,3,5,2
 140,2025-12-10,P1,Iev,12,4,5,3
-140,2025-12-10,P1,Quentin,112,2,5,4
+140,2025-12-10,P1,Q2,112,2,5,4
 140,2025-12-10,P1,Stef,170,1,5,5
 141,2025-12-10,P2,Stef,276,1,1,1
 141,2025-12-10,P2,Evan,8,5,1,2
@@ -600,7 +600,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 141,2025-12-10,P2,Manon,14,4,1,4
 141,2025-12-10,P2,Manu,159,3,1,5
 142,2025-12-10,P2,Lolo,27,4,2,1
-142,2025-12-10,P2,Quentin,23,5,2,2
+142,2025-12-10,P2,Q2,23,5,2,2
 142,2025-12-10,P2,Mat,175,1,2,3
 142,2025-12-10,P2,Léo,32,3,2,4
 142,2025-12-10,P2,Hepa,40,2,2,5
@@ -626,7 +626,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 146,2025-12-10,DF,Michoux,14,4,1,4
 146,2025-12-10,DF,Benoit,200,1,1,5
 147,2025-12-10,DF,V6,62,5,2,1
-147,2025-12-10,DF,Quentin,145,1,2,2
+147,2025-12-10,DF,Q2,145,1,2,2
 147,2025-12-10,DF,Evan,88,3,2,3
 147,2025-12-10,DF,Q3,125,2,2,4
 147,2025-12-10,DF,Toussaint,82,4,2,5
@@ -647,7 +647,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 150,2025-12-10,DF,Kilian,7,5,5,5
 150,2025-12-10,DF,Emma,5,6,5,6
 151,2025-12-10,F,Stef,51,4,1,1
-151,2025-12-10,F,Quentin,43,5,1,2
+151,2025-12-10,F,Q2,43,5,1,2
 151,2025-12-10,F,Antoine,89,3,1,3
 151,2025-12-10,F,Benoit,112,2,1,4
 151,2025-12-10,F,Aurel,177,1,1,5
@@ -701,7 +701,7 @@ Partie_ID,Date,Phase,Joueur,Score_final,Classement_final,Cible,Ordre
 164,2025-12-17,DF,Ethos,62,2,3,3
 164,2025-12-17,DF,Q,63,1,3,4
 165,2025-12-17,DF,Thib,20,3,4,1
-165,2025-12-17,DF,Quentin,33,2,4,2
+165,2025-12-17,DF,Q2,33,2,4,2
 165,2025-12-17,DF,Matthieu,53,1,4,3
 166,2025-12-17,DF,Lucas,152,1,5,1
 166,2025-12-17,DF,Stef,112,3,5,2
