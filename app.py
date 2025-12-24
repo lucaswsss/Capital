@@ -175,7 +175,7 @@ elif choice=="Par joueur":
         score_moyen2=df_filtered2["Score_final"].mean()
         score_moyenpartie=df_filtered["Score_Après"].mean()
 
-        col1, col2, col3 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         col1.metric("Taux de réussite global des contrats (nombres inclus)", f"{taux_reussite2:.1%}")
         col2.metric("Score final moyen", f"{score_moyen2:.0f}")
         col3.metric("Score moyen au cours de la partie", f"{score_moyenpartie:.0f}")
