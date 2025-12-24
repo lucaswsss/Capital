@@ -173,10 +173,12 @@ elif choice=="Par joueur":
         data_joueur = taux_joueur[taux_joueur["Joueur"] == joueur_sel]
         taux_reussite2=df_filtered["Réussi"].mean()
         score_moyen2=df_filtered2["Score_final"].mean()
+        score_moyenpartie=df_filtered["Score_Après"].mean()
 
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(2)
         col1.metric("Taux de réussite global des contrats (nombres inclus)", f"{taux_reussite2:.1%}")
         col2.metric("Score final moyen", f"{score_moyen2:.0f}")
+        col3.metric("Score moyen au cours de la partie", f"{score_moyenpartie:.0f}")
 
         st.subheader("Réussite par contrat")
         fig2, ax2 = plt.subplots(figsize=(10, 4))
@@ -222,14 +224,23 @@ elif choice=="Par joueur":
             .reset_index()
             .sort_values(["Score_final"], ascending=[False])
             )
+            df_partie = (
+            df.groupby(["Joueur"])["Score_Après"]
+            .mean()
+            .reset_index()
+            .sort_values(["Score_Après"], ascending=[False])
+            .rename(columns={"Score_Après": "Score moyen"})
+            )
             st.subheader("Top 10 des moyennes de score final")
             st.table(df_moy.head(10))
             st.subheader("Top 10 en réussite des contrats (nombres compris)")
             st.table(df_reussi.head(10))
+            st.subheader("Top 10 en score moyen au cours de la partie")
+            st.table(df_partie.head(10))
             
 
 elif choice=="Par contrat":
-    tab1, tab2= st.tabs(["Contrats spéciaux", "Nombres"], width=200)
+    tab1, tab2= st.tabs(["Contrats spéciaux", "Nombres"])
 
     with tab1:
         contrat = st.selectbox("Contrat",df[df["Type_Contrat"].isin(["Spécial", "Points"])]["Contrat"].unique())
@@ -285,7 +296,7 @@ elif choice=="Par contrat":
         col1met=dftab2["Réussi"].mean()
         col1.metric("Taux de réussite global aux nombres", f"{col1met:.1%}")
         col2met=dftab2["Nb"].mean()
-        col2.metric("Score moyen", f"{col2met:.1f}")
+        col2.metric("Score moyen", f"{col2met:.2f}")
         st.subheader("Nombre les plus touchés")
         nb_nombres = (
             dftab2.groupby(["Contrat"])["Nb"]
@@ -408,6 +419,7 @@ elif choice=="Divers":
 
 
     st.write("En travaux...")
+    st.dataframe(df_divpartie)
     
     #st.table(df_divisions.head(10))
 
