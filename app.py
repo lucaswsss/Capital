@@ -229,7 +229,7 @@ elif choice=="Par joueur":
             
 
 elif choice=="Par contrat":
-    tab1, tab2= st.tabs(["Contrats spéciaux", "Nombres"])
+    tab1, tab2= st.tabs(["Contrats spéciaux", "Nombres"], width=200)
 
     with tab1:
         contrat = st.selectbox("Contrat",df[df["Type_Contrat"].isin(["Spécial", "Points"])]["Contrat"].unique())
