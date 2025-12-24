@@ -419,7 +419,7 @@ elif choice=="Divers":
 
 
     st.write("En travaux...")
-    st.dataframe(df_divpartie)
+    #st.dataframe(df_divpartie)
     
     #st.table(df_divisions.head(10))
 
