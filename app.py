@@ -27,15 +27,21 @@ st.title("🎯 Darts Club des Gones - Capital")
 st.markdown("Visualisez vos performances et les statistiques globales des soirées ! (voir menu à gauche)")
 
 #df2["Points"]=5-df2["Classement_final"]
-df2["Session"]=df2["Date"].apply(lambda x: "Rentrée 2025" if x < "2025-11-01" else "Automne 2025")
+df2["Session"]=df2["Date"].apply(lambda x: "Rentrée 2025" if x < "2025-11-01" else "Automne 2025" if x < "2025-12-18" else "Hiver 2026")
 finales = pd.DataFrame({
-    "Session": ["Rentrée 2025", "Automne 2025"],
-    "Finale": ["2025-10-29","2025-12-17"]
+    "Session": ["Hiver 2026", "Rentrée 2025", "Automne 2025"],
+    "Finale": ["2026-02-25","2025-10-29","2025-12-17"]
 })
 #finales["Finale"] = pd.to_datetime(finales["Finale"])
 #finales=finales.rename(columns={"Date":"Finale"})
 df2=df2.merge(finales, on="Session", how="left")
 df2["Points"]=df2.apply(lambda x: (5 - x["Classement_final"])*2 if x["Date"]==x["Finale"] else 5-x["Classement_final"],axis=1)
+
+nb_parties=df2["Joueur"].value_counts()
+joueurs_gardes=nb_parties[nb_parties >= 10].index
+df_dix=df[df["Joueur"].isin(joueurs_gardes)]
+df2_dix=df2[df2["Joueur"].isin(joueurs_gardes)]
+
 
 if "session_radio_tab2" not in st.session_state:
     st.session_state["session_radio_tab2"] = "Automne 2025"
@@ -136,7 +142,7 @@ if choice=="Général":
 
 
     with tab2 :
-        session = st.selectbox("Session", ["Automne 2025", "Rentrée 2025"])
+        session = st.selectbox("Session", ["Hiver 2026", "Automne 2025", "Rentrée 2025"])
         df2clas=df2[df2["Session"] == session]
         Classement=(
             df2clas.groupby(["Joueur"])["Points"]
