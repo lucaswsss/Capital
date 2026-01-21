@@ -219,19 +219,19 @@ elif choice=="Par joueur":
 
     with tab2 :
             df_reussi = (
-            df.groupby(["Joueur"])["Réussi"]
+            df_dix.groupby(["Joueur"])["Réussi"]
             .mean()
             .reset_index()
             .sort_values(["Réussi"], ascending=[False])
              )
             df_moy = (
-            df2.groupby(["Joueur"])["Score_final"]
+            df2_dix.groupby(["Joueur"])["Score_final"]
             .mean()
             .reset_index()
             .sort_values(["Score_final"], ascending=[False])
             )
             df_partie = (
-            df.groupby(["Joueur"])["Score_Après"]
+            df_dix.groupby(["Joueur"])["Score_Après"]
             .mean()
             .reset_index()
             .sort_values(["Score_Après"], ascending=[False])
@@ -250,7 +250,7 @@ elif choice=="Par contrat":
 
     with tab1:
         contrat = st.selectbox("Contrat",df[df["Type_Contrat"].isin(["Spécial", "Points"])]["Contrat"].unique())
-        df_filtered = df[df["Contrat"]==contrat]
+        df_filtered = df_dix[df_dix["Contrat"]==contrat]
         st.header("Scores les plus communs par contrat")
         col1, col2, col3 = st.columns(3)
         col1met=df_filtered[df_filtered["Gain"]>0]["Gain"].mean()
@@ -296,7 +296,7 @@ elif choice=="Par contrat":
             )
             st.table(taux_par_joueur.head(10))
     with tab2:
-        dftab2=df[df["Type_Contrat"]=="Nombre"]
+        dftab2=df_dix[df_dix["Type_Contrat"]=="Nombre"]
         dftab2.loc[dftab2["Nb"].astype(float) < 0, "Nb"] = 0
         col1, col2 = st.columns(2)
         col1met=dftab2["Réussi"].mean()
