@@ -251,11 +251,12 @@ elif choice=="Par contrat":
     with tab1:
         contrat = st.selectbox("Contrat",df[df["Type_Contrat"].isin(["Spécial", "Points"])]["Contrat"].unique())
         df_filtered = df_dix[df_dix["Contrat"]==contrat]
+        df_filtered22 = df[df["Contrat"]==contrat]
         st.header("Scores les plus communs par contrat")
         col1, col2, col3 = st.columns(3)
-        col1met=df_filtered[df_filtered["Gain"]>0]["Gain"].mean()
+        col1met=df_filtered22[df_filtered22["Gain"]>0]["Gain"].mean()
         col1.metric("Gain moyen", f"{col1met:.1f}")
-        df_filteredgain=df_filtered[df_filtered["Gain"]>0]
+        df_filteredgain=df_filtered22[df_filtered22["Gain"]>0]
         scores_freq = (
             df_filteredgain["Gain"]
             .value_counts()
@@ -297,15 +298,17 @@ elif choice=="Par contrat":
             st.table(taux_par_joueur.head(10))
     with tab2:
         dftab2=df_dix[df_dix["Type_Contrat"]=="Nombre"]
+        dftab22=df[df["Type_Contrat"]=="Nombre"]
         dftab2.loc[dftab2["Nb"].astype(float) < 0, "Nb"] = 0
+        dftab22.loc[dftab22["Nb"].astype(float) < 0, "Nb"] = 0
         col1, col2 = st.columns(2)
-        col1met=dftab2["Réussi"].mean()
+        col1met=dftab22["Réussi"].mean()
         col1.metric("Taux de réussite global aux nombres", f"{col1met:.1%}")
-        col2met=dftab2["Nb"].mean()
+        col2met=dftab22["Nb"].mean()
         col2.metric("Score moyen", f"{col2met:.2f}")
         st.subheader("Nombre les plus touchés")
         nb_nombres = (
-            dftab2.groupby(["Contrat"])["Nb"]
+            dftab22.groupby(["Contrat"])["Nb"]
             .mean()
             .reset_index()
             .rename(columns={"Contrat": "Nombre", "Nb": "mean"})
@@ -320,12 +323,18 @@ elif choice=="Par contrat":
         st.pyplot(fig)
         st.subheader("Meilleurs joueurs sur les nombres (% validation)")
         taux_par_joueur = (
+        dftab22.groupby(["Joueur"])["Réussi"]
+        .mean()
+        .reset_index()
+        .sort_values(["Réussi"], ascending=[False])
+        )
+        taux_par_joueur22 = (
         dftab2.groupby(["Joueur"])["Réussi"]
         .mean()
         .reset_index()
         .sort_values(["Réussi"], ascending=[False])
         )
-        st.table(taux_par_joueur.head(10))
+        st.table(taux_par_joueur22.head(10))
         st.subheader("Meilleurs joueurs sur les nombres (moyenne)")
         taux_par_joueur2 = (
         dftab2.groupby(["Joueur"])["Nb"]
@@ -336,7 +345,7 @@ elif choice=="Par contrat":
         st.table(taux_par_joueur2.head(10))
 
         joueur_sel = st.selectbox("Stats par joueur :", sorted(df["Joueur"].unique()))
-        df_filt=dftab2[dftab2["Joueur"]==joueur_sel]
+        df_filt=dftab22[dftab22["Joueur"]==joueur_sel]
         nb_nombres_par_joueur = (
             df_filt.groupby(["Contrat"])["Nb"]
             .mean()
