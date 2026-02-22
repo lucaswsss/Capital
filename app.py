@@ -38,7 +38,7 @@ df2=df2.merge(finales, on="Session", how="left")
 df2["Points"]=df2.apply(lambda x: (5 - x["Classement_final"])*2 if x["Date"]==x["Finale"] else 5-x["Classement_final"],axis=1)
 
 nb_parties=df2["Joueur"].value_counts()
-joueurs_gardes=nb_parties[nb_parties >= 1].index
+joueurs_gardes=nb_parties[nb_parties >= 15].index
 df_dix=df[df["Joueur"].isin(joueurs_gardes)]
 df2_dix=df2[df2["Joueur"].isin(joueurs_gardes)]
 
