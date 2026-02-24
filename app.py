@@ -431,6 +431,64 @@ elif choice=="Divers":
         .sum()
 
     )
+    st.header("🏆 Tableau d'Honneur des Gones")
+    
+    # On identifie les finales gagnées (Phase 'F' et Classement 1)
+    for i in range(1, 6):
+        df2[f"{i}e"] = (df2["Classement_final"] == i).astype(int)
+    df2["Soleil"]=((df2["Phase"]=="F") & (df2["Classement_final"]==1)).astype(int)
+    df2["Est_Finale"]=(df2["Phase"]=="F").astype(int)
+    
+    stats_parties=df2.groupby("Joueur").agg(
+        Parties=("Parties_ID", "nunique"),
+        Finales=("Est_Finale", "sum"),
+        Soleils=("Soleils", "sum"),
+        Victoires=("1e", "sum"),
+        Deuxième=("2e", "sum"),
+        Troisième=("3e", "sum"),
+        Quatrième=("4e", "sum"),
+        Cinquième=("5e", "sum"),
+        Score_Moyen_Final=("Score_final", "mean")
+    )
+    
+    # 2. Calcul des stats basées sur les contrats (df)
+    stats_contrats = df.groupby("Joueur").agg(
+        Réussite=("Réussi", "mean"),
+        Score_Moyen_Tour=("Score_Après", "mean")
+    )
+    
+    # 3. Fusion des deux tableaux
+    recap = pd.concat([stats_parties, stats_contrats], axis=1).reset_index()
+    
+    # 4. Nettoyage et formatage
+    recap["Réussite"] = (recap["Réussite"] * 100).round(1)
+    recap["Score_Moyen_Final"] = recap["Score_Moyen_Final"].round(1)
+    recap["Score_Moyen_Tour"] = recap["Score_Moyen_Tour"].round(1)
+    
+    # On renomme pour le style
+    recap = recap.rename(columns={
+        "Soeleil": "☀️ Soleils",
+        "Finales": "📅 Nb Finales",
+        "Victoires": "1er",
+        "Deuxième": "2e",
+        "Troisième": "3e",
+        "Quatrième": "4e",
+        "Cinquième": "5e",
+        "Réussite": "% Réussite"
+    })
+    
+    # 5. Affichage interactif
+    st.dataframe(
+        recap.sort_values("🥇 Finales", ascending=False), 
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "% Réussite": st.column_config.NumberColumn(format="%.1f%%"),
+            "🥇 Finales": st.column_config.NumberColumn(help="Nombre de victoires en grande finale"),
+        }
+    )
+        
+
 
 
     st.write("En travaux...")
