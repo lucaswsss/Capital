@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly.express as px
 
 # --- Configuration de la page ---
 st.set_page_config(page_title="🎯 Le Capital", layout="wide", page_icon="dcg.jpg")
@@ -73,30 +74,51 @@ if choice=="Général":
         col2.metric("Score final moyen", f"{score_moyen:.0f}")
         col3.metric("Score final moyen pour un vainqueur", f"{score_vainqueur:.0f}")
 
-        # --- Taux de réussite par contrat ---
+       
+
+        # --- Nouveau Taux de réussite par contrat (Plotly) ---
         st.subheader("🎯 Taux de réussite par contrat")
+        
+        # 1. On prépare les données (identique à ton code)
         taux_par_contrat = (
             df.groupby("Contrat")["Réussi"]
             .mean()
             .reset_index()
             .sort_values("Réussi", ascending=False)
         )
-
-        fig, ax = plt.subplots(figsize=(10, 4))
-        bars=ax.bar(taux_par_contrat["Contrat"], taux_par_contrat["Réussi"], color="skyblue")
-        ax.set_ylabel("Taux de réussite")
-        ax.set_xlabel("Contrat")
-        ax.set_ylim(0, 1)
-        plt.xticks(rotation=45)
-        for bar in bars:
-            height = bar.get_height()
-            ax.text(
-                bar.get_x() + bar.get_width() / 2,  # position horizontale (milieu de la barre)
-                height + 0.02,                      # position verticale (au-dessus)
-                f"{height:.1%}",                    # texte (format pourcentage)
-                ha="center", va="bottom", fontsize=9
-            )
-
+        
+        # 2. Création du graphique interactif
+        fig = px.bar(
+            taux_par_contrat, 
+            x="Contrat", 
+            y="Réussi",
+            text="Réussi", # Affiche le texte sur les barres
+            color="Réussi", # Colore les barres selon la réussite (dégradé)
+            color_continuous_scale="Viridis", # Un dégradé pro et lisible
+            labels={"Réussi": "Taux de réussite", "Contrat": "Type de contrat"},
+            template="plotly_white" # Fond propre
+        )
+        
+        # 3. Ajustements pour le look et le mobile
+        fig.update_traces(
+            texttemplate='%{text:.1%}', # Formatage des pourcentages
+            textposition='outside',
+            marker_line_color='rgb(8,48,107)',
+            marker_line_width=1.5,
+            opacity=0.8
+        )
+        
+        fig.update_layout(
+            xaxis_tickangle=-45,
+            yaxis_tickformat='.0%', # Axe Y en pourcentage
+            yaxis_range=[0, 1.1],   # Laisse de la place pour les labels en haut
+            showlegend=False,
+            height=450,             # Hauteur fixe pour éviter que ça soit trop petit
+            margin=dict(l=20, r=20, t=20, b=20) # Marges réduites pour mobile
+        )
+        
+        # 4. Affichage dans Streamlit
+        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
         st.pyplot(fig)
 
         st.subheader("Réparition des scores en fonction du classement final")
