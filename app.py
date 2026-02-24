@@ -431,7 +431,8 @@ elif choice=="Divers":
         .sum()
 
     )
-    st.header("🏆 Tableau d'Honneur des Gones")
+    st.header("🏆 Tableau récapitualitif")
+    st.subheader("Statistiques depuis le 8 Octobre 2025")
     
     # On identifie les finales gagnées (Phase 'F' et Classement 1)
     for i in range(1, 6):
