@@ -549,15 +549,14 @@ elif choice=="Données" :
             for i, joueur in enumerate(st.session_state.scores.keys()):
                 with cols_input[i]:
                     st.write(f"**{joueur}**")
-                    reussi = st.checkbox("Réussi ?", key=f"check_{joueur}_{tour_idx}")
                     points = st.number_input("Points marqués", min_value=0, step=1, key=f"pts_{joueur}_{tour_idx}")
-                    form_scores[joueur] = {"reussi": reussi, "points": points}
+                    form_scores[joueur] = {"points": points}
     
             if st.button("Valider le tour ✅"):
                 for joueur, result in form_scores.items():
                     old_score = st.session_state.scores[joueur]
                     
-                    if result["reussi"]:
+                    if result["points"]>0:
                         # Si réussi, on ajoute les points traditionnels
                         st.session_state.scores[joueur] += result["points"]
                     else:
