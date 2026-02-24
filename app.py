@@ -499,5 +499,86 @@ elif choice=="Divers":
 
 
 elif choice=="Données" :
-    st.subheader("📋 Données")
-    st.dataframe(df2)
+    
+    # Configuration de la page
+    st.title("🎯 Saisie de Partie en Direct")
+    
+    # 1. Liste des contrats dans l'ordre (selon tes règles)
+    CONTRATS = [
+        "Capital", "20", "Suite", "19", "Côté", "18", "Couleurs", 
+        "17", "57", "16", "Peluche", "15", "Triple", "14", "Double", "13", "Bulle"
+    ]
+    
+    # 2. Initialisation de la partie (Session State)
+    if "game_active" not in st.session_state:
+        st.session_state.game_active = False
+        st.session_state.current_tour = 0
+        st.session_state.scores = {}
+    
+    # --- Formulaire de début de partie ---
+    if not st.session_state.game_active:
+        st.subheader("Nouvelle Partie")
+        joueurs_input = st.text_input("Noms des joueurs (séparés par une virgule)", "Ely, Manon, Aurel")
+        if st.button("Lancer la partie 🚀"):
+            liste_joueurs = [j.strip() for j in joueurs_input.split(",")]
+            st.session_state.scores = {j: 0 for j in liste_joueurs}
+            st.session_state.game_active = True
+            st.session_state.current_tour = 0
+            st.rerun()
+    
+    # --- Interface de jeu ---
+    else:
+        tour_idx = st.session_state.current_tour
+        if tour_idx < len(CONTRATS):
+            contrat_actuel = CONTRATS[tour_idx]
+            st.header(#f"Tour {tour_idx + 1} : {contrat_actuel}")
+                      f"Contrat actuel : **{contrat_actuel}**")
+            
+            # Affichage des scores actuels
+            cols_score = st.columns(len(st.session_state.scores))
+            for i, (joueur, score) in enumerate(st.session_state.scores.items()):
+                cols_score[i].metric(joueur, f"{score} pts")
+    
+            st.divider()
+    
+            # Zone de saisie pour chaque joueur
+            st.subheader("Saisie des résultats")
+            form_scores = {}
+            cols_input = st.columns(len(st.session_state.scores))
+            
+            for i, joueur in enumerate(st.session_state.scores.keys()):
+                with cols_input[i]:
+                    st.write(f"**{joueur}**")
+                    reussi = st.checkbox("Réussi ?", key=f"check_{joueur}_{tour_idx}")
+                    points = st.number_input("Points marqués", min_value=0, step=1, key=f"pts_{joueur}_{tour_idx}")
+                    form_scores[joueur] = {"reussi": reussi, "points": points}
+    
+            if st.button("Valider le tour ✅"):
+                for joueur, result in form_scores.items():
+                    old_score = st.session_state.scores[joueur]
+                    
+                    if result["reussi"]:
+                        # Si réussi, on ajoute les points traditionnels
+                        st.session_state.scores[joueur] += result["points"]
+                    else:
+                        # Si raté, on divise par 2 (arrondi en dessous)
+                        st.session_state.scores[joueur] = old_score // 2
+                
+                st.session_state.current_tour += 1
+                st.rerun()
+    
+        else:
+            st.balloons()
+            st.success("Partie terminée !")
+            st.table(pd.DataFrame(st.session_state.scores.items(), columns=["Joueur", "Score Final"]).sort_values("Score Final", ascending=False))
+            
+            if st.button("Recommencer une partie"):
+                st.session_state.game_active = False
+                st.rerun()
+    
+        if st.button("Annuler la partie ❌"):
+            st.session_state.game_active = False
+            st.rerun()
+    
+    #st.subheader("📋 Données")
+    #st.dataframe(df2)
