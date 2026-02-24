@@ -440,9 +440,9 @@ elif choice=="Divers":
     df2["Est_Finale"]=(df2["Phase"]=="F").astype(int)
     
     stats_parties=df2.groupby("Joueur").agg(
-        Parties=("Parties_ID", "nunique"),
+        Parties=("Partie_ID", "nunique"),
         Finales=("Est_Finale", "sum"),
-        Soleils=("Soleils", "sum"),
+        Soleils=("Soleil", "sum"),
         Victoires=("1e", "sum"),
         Deuxième=("2e", "sum"),
         Troisième=("3e", "sum"),
