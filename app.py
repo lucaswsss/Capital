@@ -479,12 +479,12 @@ elif choice=="Divers":
     
     # 5. Affichage interactif
     st.dataframe(
-        recap.sort_values("🥇 Finales", ascending=False), 
+        recap.sort_values("☀️ Soleils", ascending=False), 
         use_container_width=True,
         hide_index=True,
         column_config={
             "% Réussite": st.column_config.NumberColumn(format="%.1f%%"),
-            "🥇 Finales": st.column_config.NumberColumn(help="Nombre de victoires en grande finale"),
+            "☀️ Soleils": st.column_config.NumberColumn(help="Nombre de victoires en grande finale"),
         }
     )
         
