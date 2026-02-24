@@ -498,7 +498,7 @@ elif choice=="Divers":
     #st.table(df_divisions.head(10))
 
 
-elif choice=="Données" :
+elif choice=="Lancer une partie" :
     
     # Configuration de la page
     st.title("🎯 Saisie de Partie en Direct")
