@@ -467,7 +467,7 @@ elif choice=="Divers":
     
     # On renomme pour le style
     recap = recap.rename(columns={
-        "Soeleil": "☀️ Soleils",
+        "Soleils": "☀️ Soleils",
         "Finales": "📅 Nb Finales",
         "Victoires": "1er",
         "Deuxième": "2e",
