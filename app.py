@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # --- Configuration de la page ---
-st.set_page_config(page_title="🎯 Le Capital", layout="wide", page_icon="dcg.jpg")
+st.set_page_config(page_title="Le Capital", layout="wide", page_icon="dcg.jpg")
 
 # --- Chargement des données ---
 @st.cache_data
@@ -49,7 +49,7 @@ if "session_radio_tab2" not in st.session_state:
 
 st.sidebar.title("Navigateur")
 choice = st.sidebar.radio("Sélectionnez une section", ["Général", 
-                                                      "Par joueur","Par contrat","Soirées","Divers","Données" ]) 
+                                                      "Par joueur","Par contrat","Soirées","Divers","Lancer une partie" ]) 
 #st.sidebar.header("🧮 Filtres")
 #joueurs_sel = st.sidebar.multiselect("Sélectionnez les joueurs :", sorted(df["Joueur"].unique()), default=df["Joueur"].unique())
 #contrats_sel = st.sidebar.multiselect("Sélectionnez les contrats :", sorted(df["Contrat"].unique()), default=df["Contrat"].unique())
