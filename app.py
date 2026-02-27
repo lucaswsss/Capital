@@ -49,7 +49,7 @@ if "session_radio_tab2" not in st.session_state:
 
 st.sidebar.title("Navigateur")
 choice = st.sidebar.radio("Sélectionnez une section", ["Général", 
-                                                      "Par joueur","Par contrat","Soirées","Divers","Lancer une partie" ]) 
+                                                      "Par joueur","Par contrat","Soirées","Tableau récap","Lancer une partie" ]) 
 #st.sidebar.header("🧮 Filtres")
 #joueurs_sel = st.sidebar.multiselect("Sélectionnez les joueurs :", sorted(df["Joueur"].unique()), default=df["Joueur"].unique())
 #contrats_sel = st.sidebar.multiselect("Sélectionnez les contrats :", sorted(df["Contrat"].unique()), default=df["Contrat"].unique())
@@ -417,7 +417,7 @@ elif choice=="Soirées":
     fig.tight_layout()
     st.pyplot(fig)
 
-elif choice=="Divers":
+elif choice=="Tableau récap":
     df["Division"] = (df["Réussi"] == 0).astype(int)
     df_divisions = (
         df.groupby(["Partie_ID", "Joueur"])["Division"]
