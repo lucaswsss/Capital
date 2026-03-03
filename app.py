@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly.express as px
 
 # --- Configuration de la page ---
 st.set_page_config(page_title="Le Capital", layout="wide", page_icon="dcg.jpg")
@@ -49,7 +50,7 @@ if "session_radio_tab2" not in st.session_state:
 
 st.sidebar.title("Navigateur")
 choice = st.sidebar.radio("Sélectionnez une section", ["Général", 
-                                                      "Par joueur","Par contrat","Soirées","Tableau récap","Lancer une partie" ]) 
+                                                      "Par joueur","Par contrat","Soirées","Tableau récap","Magnum","Lancer une partie" ]) 
 #st.sidebar.header("🧮 Filtres")
 #joueurs_sel = st.sidebar.multiselect("Sélectionnez les joueurs :", sorted(df["Joueur"].unique()), default=df["Joueur"].unique())
 #contrats_sel = st.sidebar.multiselect("Sélectionnez les contrats :", sorted(df["Contrat"].unique()), default=df["Contrat"].unique())
@@ -496,6 +497,83 @@ elif choice=="Tableau récap":
     #st.dataframe(df_divpartie)
     
     #st.table(df_divisions.head(10))
+elif choice=="Magnum":
+
+    ordre_contrats=df["Contrat"].unique().tolist()
+    df["Division"] = (df["Réussi"] == 0).astype(int)
+    df_divisions = (
+        df.groupby(["Partie_ID", "Joueur"])["Division"]
+        .sum()
+        .reset_index()
+        .rename(columns={"Division": "Nb_Divisions"})
+        .sort_values("Nb_Divisions", ascending=True)
+    )
+    df_divpartie=(
+        df_divisions.groupby("Partie_ID")["Nb_Divisions"]
+        .sum()
+
+    )
+    magnum=list(df_divisions[df_divisions["Nb_Divisions"]==0]["Joueur"])
+    if magnum:
+        st.header(f"🍾 **Ils ont réussi le Magnum :** {', '.join(magnum)}")
+    else:
+        st.header("Aucun Magnum pour le moment. Gardez la foi ! 🎯")
+
+    df_div=df[(df["Réussi"] == 0) & (~df["Joueur"].isin(magnum))]
+
+
+    test1 = (df_div.sort_values("Tour")
+                .groupby(["Partie_ID", "Joueur"])
+                .first() 
+                .reset_index())
+    
+    test1['Contrat']=pd.Categorical(test1['Contrat'], categories=ordre_contrats, ordered=True)
+    records_personnels=test1.sort_values('Contrat', ascending=False).drop_duplicates('Joueur')
+
+    for contrat in reversed(ordre_contrats):
+        joueurs_record=records_personnels[records_personnels['Contrat']==contrat]['Joueur'].tolist()
+        nb_arrets_total=len(test1[test1['Contrat']==contrat])
+        
+        if nb_arrets_total>0:
+            st.subheader(f"📝 Contrat **{contrat}** — {nb_arrets_total} premières divisions au total")
+            if joueurs_record:
+                st.write("🏅 **Record personnel pour :**")
+                for j in joueurs_record:
+                        st.write(f"- {j}")
+            else:
+                st.write("*(Personne n'a ce contrat comme record personnel)*")
+    import plotly.express as px
+
+
+    if not test1.empty:
+        st.subheader("📊 Répartition des premières divisions")
+        stats_graph=test1['Contrat'].value_counts().reset_index()
+        stats_graph.columns=['Contrat', 'Premières divisions']
+        stats_graph['Contrat']=stats_graph['Contrat'].astype(str)
+        stats_graph['Contrat']=pd.Categorical(stats_graph['Contrat'], categories=ordre_contrats, ordered=True)
+        stats_graph=stats_graph.sort_values('Contrat')
+
+        fig = px.bar(
+            stats_graph, 
+            x='Contrat', 
+            y='Premières divisions',
+            labels={'Nombre de chutes': 'Nombre de 1ères divisions'},
+            title="Répartition des premières divisions",
+        )
+        
+        fig.update_layout(
+        xaxis_type='category', 
+        xaxis_title="Nom du Contrat",
+        yaxis_title="Nombre de 1ères divisions",
+        xaxis_tickmode='linear' 
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.write("Pas assez de données pour le graphique.")
+
+    
+
+
 
 
 elif choice=="Lancer une partie" :
