@@ -518,32 +518,15 @@ elif choice=="Magnum":
         st.header(f"🍾 **Ils ont réussi le Magnum :** {', '.join(magnum)}")
     else:
         st.header("Aucun Magnum pour le moment. Gardez la foi ! 🎯")
-
+    
     df_div=df[(df["Réussi"] == 0) & (~df["Joueur"].isin(magnum))]
-
-
+    
     test1 = (df_div.sort_values("Tour")
                 .groupby(["Partie_ID", "Joueur"])
                 .first() 
                 .reset_index())
     
     test1['Contrat']=pd.Categorical(test1['Contrat'], categories=ordre_contrats, ordered=True)
-    records_personnels=test1.sort_values('Contrat', ascending=False).drop_duplicates('Joueur')
-
-    for contrat in reversed(ordre_contrats):
-        joueurs_record=records_personnels[records_personnels['Contrat']==contrat]['Joueur'].tolist()
-        nb_arrets_total=len(test1[test1['Contrat']==contrat])
-        
-        if nb_arrets_total>0:
-            st.subheader(f"📝 Contrat **{contrat}** — {nb_arrets_total} premières divisions au total")
-            if joueurs_record:
-                st.write("🏅 **Record personnel pour :**")
-                for j in joueurs_record:
-                        st.write(f"- {j}")
-            else:
-                st.write("*(Personne n'a ce contrat comme record personnel)*")
-    import plotly.express as px
-
 
     if not test1.empty:
         st.subheader("📊 Répartition des premières divisions")
@@ -558,7 +541,6 @@ elif choice=="Magnum":
             x='Contrat', 
             y='Premières divisions',
             labels={'Nombre de chutes': 'Nombre de 1ères divisions'},
-            title="Répartition des premières divisions",
         )
         
         fig.update_layout(
@@ -570,6 +552,26 @@ elif choice=="Magnum":
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.write("Pas assez de données pour le graphique.")
+    
+ 
+
+    records_personnels=test1.sort_values('Contrat', ascending=False).drop_duplicates('Joueur')
+
+    for contrat in reversed(ordre_contrats):
+        joueurs_record=records_personnels[records_personnels['Contrat']==contrat]['Joueur'].tolist()
+        nb_arrets_total=len(test1[test1['Contrat']==contrat])
+        
+        if nb_arrets_total>0:
+            st.subheader(f"📝 Contrat **{contrat}** — {nb_arrets_total} premières divisions au total")
+            if joueurs_record:
+                st.write("🏅 **Record personnel pour :**")
+                for j in joueurs_record:
+                        st.write(f"- {j}")
+            else:
+                st.write("*(Personne n'a ce contrat comme record personnel)*")
+
+
+
 
     
 
