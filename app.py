@@ -499,83 +499,102 @@ elif choice=="Tableau récap":
     #st.table(df_divisions.head(10))
 elif choice=="Magnum":
 
-    ordre_contrats=df["Contrat"].unique().tolist()
-    df["Division"] = (df["Réussi"] == 0).astype(int)
-    df_divisions = (
-        df.groupby(["Partie_ID", "Joueur"])["Division"]
-        .sum()
-        .reset_index()
-        .rename(columns={"Division": "Nb_Divisions"})
-        .sort_values("Nb_Divisions", ascending=True)
-    )
-    df_divpartie=(
-        df_divisions.groupby("Partie_ID")["Nb_Divisions"]
-        .sum()
+    tab1, tab2= st.tabs(["Magnum", "H2H"])
 
-    )
-    magnum=list(df_divisions[df_divisions["Nb_Divisions"]==0]["Joueur"])
-    if magnum:
-        st.header(f"🍾 **Ils ont réussi le Magnum :** {', '.join(magnum)}")
-    else:
-        st.header("Aucun Magnum pour le moment. Gardez la foi ! 🎯")
-    
-    df_div=df[(df["Réussi"] == 0) & (~df["Joueur"].isin(magnum))]
-    
-    test1 = (df_div.sort_values("Tour")
-                .groupby(["Partie_ID", "Joueur"])
-                .first() 
-                .reset_index())
-    
-    test1['Contrat']=pd.Categorical(test1['Contrat'], categories=ordre_contrats, ordered=True)
+    with tab1 :
 
-    if not test1.empty:
-        st.subheader("📊 Répartition des premières divisions")
-        stats_graph=test1['Contrat'].value_counts().reset_index()
-        stats_graph.columns=['Contrat', 'Premières divisions']
-        stats_graph['Contrat']=stats_graph['Contrat'].astype(str)
-        stats_graph['Contrat']=pd.Categorical(stats_graph['Contrat'], categories=ordre_contrats, ordered=True)
-        stats_graph=stats_graph.sort_values('Contrat')
-
-        fig = px.bar(
-            stats_graph, 
-            x='Contrat', 
-            y='Premières divisions',
-            labels={'Nombre de chutes': 'Nombre de 1ères divisions'},
+        ordre_contrats=df["Contrat"].unique().tolist()
+        df["Division"] = (df["Réussi"] == 0).astype(int)
+        df_divisions = (
+            df.groupby(["Partie_ID", "Joueur"])["Division"]
+            .sum()
+            .reset_index()
+            .rename(columns={"Division": "Nb_Divisions"})
+            .sort_values("Nb_Divisions", ascending=True)
         )
-        
-        fig.update_layout(
-        xaxis_type='category', 
-        xaxis_title="Nom du Contrat",
-        yaxis_title="Nombre de 1ères divisions",
-        xaxis_tickmode='linear' 
+        df_divpartie=(
+            df_divisions.groupby("Partie_ID")["Nb_Divisions"]
+            .sum()
+
         )
-        st.plotly_chart(fig, use_container_width=True)
-    else:
-        st.write("Pas assez de données pour le graphique.")
-    
- 
-
-    records_personnels=test1.sort_values('Contrat', ascending=False).drop_duplicates('Joueur')
-
-    for contrat in reversed(ordre_contrats):
-        joueurs_record=records_personnels[records_personnels['Contrat']==contrat]['Joueur'].tolist()
-        nb_arrets_total=len(test1[test1['Contrat']==contrat])
+        magnum=list(df_divisions[df_divisions["Nb_Divisions"]==0]["Joueur"])
+        if magnum:
+            st.header(f"🍾 **Ils ont réussi le Magnum :** {', '.join(magnum)}")
+        else:
+            st.header("Aucun Magnum pour le moment. Gardez la foi ! 🎯")
         
-        if nb_arrets_total>0:
-            st.subheader(f"📝 Contrat **{contrat}** — {nb_arrets_total} premières divisions au total")
-            if joueurs_record:
-                st.write("🏅 **Record personnel pour :**")
-                for j in joueurs_record:
-                        st.write(f"- {j}")
-            else:
-                st.write("*(Personne n'a ce contrat comme record personnel)*")
+        df_div=df[(df["Réussi"] == 0) & (~df["Joueur"].isin(magnum))]
+        
+        test1 = (df_div.sort_values("Tour")
+                    .groupby(["Partie_ID", "Joueur"])
+                    .first() 
+                    .reset_index())
+        
+        test1['Contrat']=pd.Categorical(test1['Contrat'], categories=ordre_contrats, ordered=True)
 
+        if not test1.empty:
+            st.subheader("📊 Répartition des premières divisions")
+            stats_graph=test1['Contrat'].value_counts().reset_index()
+            stats_graph.columns=['Contrat', 'Premières divisions']
+            stats_graph['Contrat']=stats_graph['Contrat'].astype(str)
+            stats_graph['Contrat']=pd.Categorical(stats_graph['Contrat'], categories=ordre_contrats, ordered=True)
+            stats_graph=stats_graph.sort_values('Contrat')
 
-
-
+            fig = px.bar(
+                stats_graph, 
+                x='Contrat', 
+                y='Premières divisions',
+                labels={'Nombre de chutes': 'Nombre de 1ères divisions'},
+            )
+            
+            fig.update_layout(
+            xaxis_type='category', 
+            xaxis_title="Nom du Contrat",
+            yaxis_title="Nombre de 1ères divisions",
+            xaxis_tickmode='linear' 
+            )
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.write("Pas assez de données pour le graphique.")
+        
     
 
+        records_personnels=test1.sort_values('Contrat', ascending=False).drop_duplicates('Joueur')
 
+        for contrat in reversed(ordre_contrats):
+            joueurs_record=records_personnels[records_personnels['Contrat']==contrat]['Joueur'].tolist()
+            nb_arrets_total=len(test1[test1['Contrat']==contrat])
+            
+            if nb_arrets_total>0:
+                st.subheader(f"📝 Contrat **{contrat}** — {nb_arrets_total} premières divisions au total")
+                if joueurs_record:
+                    st.write("🏅 **Record personnel pour :**")
+                    for j in joueurs_record:
+                            st.write(f"- {j}")
+                else:
+                    st.write("*(Personne n'a ce contrat comme record personnel)*")
+    with tab2:
+        df2=df2[["Partie_ID","Joueur","Classement_final","Phase"]]
+
+        df_hth=pd.merge(df2,df2,on="Partie_ID")
+        df_hth=df_hth[df_hth["Joueur_x"]!=df_hth["Joueur_y"]]
+        df_hth["Battu"]=df_hth["Classement_final_x"]<df_hth["Classement_final_y"]
+        mat=df_hth.groupby(["Joueur_x",'Joueur_y'])["Battu"].agg(["sum","count"]).reset_index()
+        mat.columns=['Joueur_1','Joueur_2','Victoires_J1','Total_Matchs']
+        mat['Victoires_J2']=mat['Total_Matchs']-mat['Victoires_J1']
+        mat=mat[mat['Joueur_1']<mat['Joueur_2']]
+        mat=mat[['Joueur_1','Joueur_2','Victoires_J1','Victoires_J2','Total_Matchs']].sort_values(by='Total_Matchs', ascending=False)
+        st.subheader("Les confrontations les plus fréquentes")
+        st.dataframe(mat.head(10))
+        st.subheader("Chercher les face à face pour un joueur particulier :")
+        joujou=st.selectbox("Joueur", sorted(df2["Joueur"].unique()))
+        if joujou:
+            hthj=df_hth.groupby(["Joueur_x",'Joueur_y'])["Battu"].agg(["sum","count"]).reset_index()
+            hthj.columns=['Joueur','Adversaire','Victoires','Matchs']
+            hthj['Défaites']=hthj['Matchs']-hthj['Victoires']
+            hthj=hthj[['Joueur','Adversaire','Victoires','Défaites','Matchs']].sort_values(by='Matchs', ascending=False)
+            hthj=hthj[hthj["Joueur"]==joujou]
+            st.dataframe(hthj)
 
 
 elif choice=="Lancer une partie" :
