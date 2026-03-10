@@ -30,8 +30,8 @@ st.markdown("Visualisez vos performances et les statistiques globales des soiré
 #df2["Points"]=5-df2["Classement_final"]
 df2["Session"]=df2["Date"].apply(lambda x: "Rentrée 2025" if x < "2025-11-01" else "Automne 2025" if x < "2025-12-18" else "Hiver 2026")
 finales = pd.DataFrame({
-    "Session": ["Hiver 2026", "Rentrée 2025", "Automne 2025"],
-    "Finale": ["2026-02-25","2025-10-29","2025-12-17"]
+    "Session": ["Mars 2026","Hiver 2026", "Rentrée 2025", "Automne 2025"],
+    "Finale": ["2026-04-29","2026-02-25","2025-10-29","2025-12-17"]
 })
 #finales["Finale"] = pd.to_datetime(finales["Finale"])
 #finales=finales.rename(columns={"Date":"Finale"})
@@ -50,7 +50,7 @@ if "session_radio_tab2" not in st.session_state:
 
 st.sidebar.title("Navigateur")
 choice = st.sidebar.radio("Sélectionnez une section", ["Général", 
-                                                      "Par joueur","Par contrat","Soirées","Tableau récap","Magnum","Lancer une partie" ]) 
+                                                      "Par joueur","Par contrat","Soirées","Tableau récap","Divers","Lancer une partie" ]) 
 #st.sidebar.header("🧮 Filtres")
 #joueurs_sel = st.sidebar.multiselect("Sélectionnez les joueurs :", sorted(df["Joueur"].unique()), default=df["Joueur"].unique())
 #contrats_sel = st.sidebar.multiselect("Sélectionnez les contrats :", sorted(df["Contrat"].unique()), default=df["Contrat"].unique())
@@ -492,14 +492,12 @@ elif choice=="Tableau récap":
         
 
 
-
-    st.write("En travaux...")
     #st.dataframe(df_divpartie)
     
     #st.table(df_divisions.head(10))
-elif choice=="Magnum":
+elif choice=="Divers":
 
-    tab1, tab2= st.tabs(["Magnum", "H2H"])
+    tab1, tab2= st.tabs(["Magnum", "Face à Face"])
 
     with tab1 :
 
