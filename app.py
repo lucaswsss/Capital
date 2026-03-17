@@ -28,7 +28,7 @@ st.title("🎯 Darts Club des Gones - Capital")
 st.markdown("Visualisez vos performances et les statistiques globales des soirées ! (voir menu à gauche)")
 
 #df2["Points"]=5-df2["Classement_final"]
-df2["Session"]=df2["Date"].apply(lambda x: "Rentrée 2025" if x < "2025-11-01" else "Automne 2025" if x < "2025-12-18" else "Hiver 2026")
+df2["Session"]=df2["Date"].apply(lambda x: "Rentrée 2025" if x < "2025-11-01" else "Automne 2025" if x < "2025-12-18" else "Hiver 2026" if x < "2026-02-26" else "Mars 2026")
 finales = pd.DataFrame({
     "Session": ["Mars 2026","Hiver 2026", "Rentrée 2025", "Automne 2025"],
     "Finale": ["2026-04-29","2026-02-25","2025-10-29","2025-12-17"]
