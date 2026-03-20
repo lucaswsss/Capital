@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import seaborn as sns
 import plotly.express as px
 
@@ -497,9 +498,186 @@ elif choice=="Tableau récap":
     #st.table(df_divisions.head(10))
 elif choice=="Divers":
 
-    tab1, tab2= st.tabs(["Magnum", "Face à Face"])
+    tab1, tab2,tab3,tab4= st.tabs(["Classement Elo", "Face à Face","Magnum","Gibolins"])
 
     with tab1 :
+        
+        def calcul_elo(df2,elo_base=1500):
+        
+            joueurs=df2['Joueur'].unique()
+            elo_dict={joueur:elo_base for joueur in joueurs}
+            nb_parties={joueur: 0 for joueur in df2['Joueur'].unique()}
+            historique = []
+            for partie_id in df2['Partie_ID'].unique():
+                partie=df2[df2['Partie_ID'] == partie_id]
+                joueurs_partie=partie['Joueur'].tolist()
+                classements_partie=partie['Classement_final'].tolist()
+                changements={joueurs: 0 for joueurs in joueurs_partie}
+                nb_joueurs=len(joueurs_partie)
+                k_dict={}
+                for nb in joueurs_partie:
+                    n=nb_parties[nb]
+                    if n<15:
+                        k_dict[nb]=50
+                    elif n<40:
+                        k_dict[nb]=30
+                    else :
+                        k_dict[nb]=20
+
+
+                for i in range(nb_joueurs):
+                    for j in range(i+1,nb_joueurs):
+                        j1=joueurs_partie[i]
+                        j2=joueurs_partie[j]
+                        elo_j1=elo_dict[j1]
+                        elo_j2=elo_dict[j2]
+
+                        proba_j1=(1/(1+10 ** ((elo_j2-elo_j1)/400)))
+                        proba_j2=1-proba_j1
+                        if classements_partie[i]<classements_partie[j]:
+                            s_j1=1
+                            s_j2=0 
+                        elif classements_partie[i]>classements_partie[j]:
+                            s_j1=0
+                            s_j2=1
+                        else:                
+                            s_j1,s_j2=0.5,0.5  
+
+                        gain_j1=((k_dict[j1])/(nb_joueurs-1))*(s_j1-proba_j1)
+                        gain_j2=((k_dict[j2])/(nb_joueurs-1))*(s_j2-proba_j2)
+
+                        changements[j1]=changements[j1]+gain_j1
+                        changements[j2]=changements[j2]+gain_j2
+                
+
+                for j in joueurs_partie:
+                    nb_parties[j]=nb_parties[j]+1
+                    elo_dict[j]=elo_dict[j]+changements[j]
+                    historique.append({'Partie_ID': partie_id, 'Joueur': j, 'Elo': elo_dict[j]})
+
+            return elo_dict, pd.DataFrame(historique),nb_parties
+        dicoo,historique,nb_parties=calcul_elo(df2)
+
+        
+
+        df_elo=pd.DataFrame(list(dicoo.items()), columns=['Joueur', 'Elo'])
+        df_matchs=pd.DataFrame(list(nb_parties.items()), columns=['Joueur', 'Matchs'])
+        df_ranking=pd.merge(df_elo, df_matchs, on='Joueur')
+        df_affiche=df_ranking[df_ranking["Matchs"]>15].sort_values('Elo', ascending=False).copy()
+        df_affiche.index=range(1, len(df_affiche)+1)
+
+        derniere_date=df2["Date"].max()
+        historique_date=pd.merge(historique, df2[["Partie_ID","Date","Phase"]], on='Partie_ID')
+        df_last=historique_date[historique_date['Date']==derniere_date]
+        df_avant=historique_date[historique_date['Date']<derniere_date]
+    
+        evolution={}
+        for joueur in df_last['Joueur'].unique():
+            histo_joueur_avant=df_avant[df_avant['Joueur'] == joueur]
+            elo_depart=histo_joueur_avant.iloc[-1]['Elo'] if not histo_joueur_avant.empty else 1500
+            elo_fin=df_last[df_last['Joueur'] == joueur].iloc[-1]['Elo']
+            evolution[joueur]=round(elo_fin-elo_depart, 0).astype(int)
+
+        df_affiche['Dernière Soirée']=df_affiche['Joueur'].map(evolution).fillna(0)
+
+        def generer_tendance(delta):
+            if delta > 0: return f"▲ +{delta}"
+            if delta < 0: return f"▼ {delta}"
+            return "—"
+        
+        df_affiche["Dernière Soirée"]=round(df_affiche["Dernière Soirée"],0).astype(int)
+        df_affiche['Evolution']=df_affiche['Dernière Soirée'].apply(generer_tendance)
+        df_affiche['Elo']=round(df_affiche['Elo'],0).astype(int)
+
+        def style_tendance(val):
+            if '▲' in str(val): color = '#28a745'
+            elif '▼' in str(val): color = '#dc3545'
+            else: color = '#6c757d' # Gris
+            return f'color: {color}; font-weight: bold'
+        
+        top_player=df_affiche.sort_values('Elo', ascending=False).iloc[0]
+        st.subheader("Classement Elo du Capital")
+        st.subheader(f"👑 Leader : {top_player['Joueur']}")
+        
+        st.divider()
+
+        st.subheader("🏆 Classement Actuel")
+        st.info("Elo de départ : 1500 - Joueurs avec 15+ parties affichés")
+        st.dataframe(df_affiche[['Joueur', 'Elo', 'Evolution']].style.applymap(style_tendance, subset=['Evolution']),use_container_width=True,hide_index=True)
+        
+        st.divider()
+
+        st.subheader("Evolution de l'Elo du top 5 actuel")
+
+
+        historique_date['Date'] = pd.to_datetime(historique_date['Date'])
+        ordre_phases = ['P1', 'P2', 'P3', 'DF', 'F']
+        historique_date['Phase'] = pd.Categorical(historique_date['Phase'], categories=ordre_phases, ordered=True)
+        historique_date = historique_date.sort_values(['Date', 'Phase'])
+        historique_date['Session']=historique_date['Date'].dt.strftime('%Y-%m-%d') + " (" + historique_date['Phase'].astype(str) + ")"
+        top_joueurs=df_affiche.head(5)['Joueur'].tolist()
+        df_top=historique_date[historique_date['Joueur'].isin(top_joueurs)].copy()
+        df_top=df_top.sort_values(['Date', 'Phase'])
+        df_pivot=df_top.pivot_table(index='Session', columns='Joueur', values='Elo', sort=False)
+        df_pivot=df_pivot.ffill()
+        fig=plt.figure(figsize=(20, 10))
+        for joueur in top_joueurs:
+            if joueur in df_pivot.columns:
+                plt.plot(df_pivot.index, df_pivot[joueur], label=joueur, linewidth=2, marker='o', markersize=4)
+
+        #plt.title(f"Évolution d'Elo du top 5 actuel", fontsize=16, fontweight='bold')
+        plt.xticks(rotation=45, ha='right', fontsize=8)
+        plt.ylabel("Points Elo", fontsize=20)
+        plt.tick_params(axis='both', which='major', labelsize=18)
+        plt.legend(title="Top Joueurs", loc='center left', bbox_to_anchor=(1, 0.5),fontsize=20,title_fontsize=20)
+        plt.grid(True, linestyle='--', alpha=0.4)
+        ax = plt.gca() # Récupère l'axe actuel
+        # On      force l'affichage de 10 graduations maximum sur l'axe X
+        ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=20))
+        
+        plt.tight_layout()
+        #plt.savefig("evolution_par_phase.png")
+        st.pyplot(fig)
+
+        st.divider()
+
+        st.header("Comparer la progression de différents joueurs")
+    
+
+        joueurs=df2['Joueur'].unique().tolist()
+        selection=st.multiselect("Choisir les joueurs à comparer :",joueurs)
+        
+        if selection:
+    
+            historique_date['Date'] = pd.to_datetime(historique_date['Date'])
+            ordre_phases = ['P1', 'P2', 'P3', 'DF', 'F']
+            historique_date['Phase'] = pd.Categorical(historique_date['Phase'], categories=ordre_phases, ordered=True)
+            historique_date = historique_date.sort_values(['Date', 'Phase'])
+            historique_date['Session']=historique_date['Date'].dt.strftime('%Y-%m-%d') + " (" + historique_date['Phase'].astype(str) + ")"
+            df_top=historique_date[historique_date['Joueur'].isin(selection)].copy()
+            df_top=df_top.sort_values(['Date', 'Phase'])
+            df_pivot=df_top.pivot_table(index='Session', columns='Joueur', values='Elo', sort=False)
+            df_pivot=df_pivot.ffill()
+            fig2=plt.figure(figsize=(20, 10))
+            for joueur in selection:
+                if joueur in df_pivot.columns:
+                    plt.plot(df_pivot.index, df_pivot[joueur], label=joueur, linewidth=2, marker='o', markersize=4)
+
+            #plt.title(f"Évolution d'Elo du top 5 actuel", fontsize=16, fontweight='bold')
+            plt.xticks(rotation=45, ha='right', fontsize=8)
+            plt.ylabel("Points Elo", fontsize=20)
+            plt.tick_params(axis='both', which='major', labelsize=18)
+            plt.legend(title="Top Joueurs", loc='center left', bbox_to_anchor=(1, 0.5),fontsize=20,title_fontsize=20)
+            plt.grid(True, linestyle='--', alpha=0.4)
+            ax2 = plt.gca() # Récupère l'axe actuel
+            # On      force l'affichage de 10 graduations maximum sur l'axe X
+            ax2.xaxis.set_major_locator(ticker.MaxNLocator(nbins=20))
+            
+            plt.tight_layout()
+            #plt.savefig("evolution_par_phase.png")
+            st.pyplot(fig2)
+
+    with tab3 :
 
         ordre_contrats=df["Contrat"].unique().tolist()
         df["Division"] = (df["Réussi"] == 0).astype(int)
@@ -593,6 +771,18 @@ elif choice=="Divers":
             hthj=hthj[['Joueur','Adversaire','Victoires','Défaites','Matchs']].sort_values(by='Matchs', ascending=False)
             hthj=hthj[hthj["Joueur"]==joujou]
             st.dataframe(hthj)
+    with tab4:
+        liste_gibolins=[i*111 for i in range(1,9)]
+        df["Gibolins"]=df["Score_Après"].isin(liste_gibolins)
+        df_gibolins=(
+            df.groupby(["Joueur"])["Gibolins"]
+            .sum()
+            .reset_index()
+            .sort_values("Gibolins", ascending=False)
+        )
+        df_gibolins.index=range(1, len(df_gibolins)+1)
+        st.subheader("Joueurs ayant réalisé des gibolins (tous compris)")
+        st.dataframe(df_gibolins[df_gibolins["Gibolins"]>0])
 
 
 elif choice=="Lancer une partie" :
