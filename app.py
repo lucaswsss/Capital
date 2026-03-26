@@ -6,6 +6,18 @@ import matplotlib.ticker as ticker
 import seaborn as sns
 import plotly.express as px
 
+if "navigation" not in st.session_state:
+    st.session_state["navigation"] = "Menu"
+
+# 2. Fonction magique pour changer de page
+def changer_page(nom_page):
+    st.session_state["navigation"] = nom_page
+
+def preparer_classement(df):
+        df = df.reset_index(drop=True)
+        df.index = df.index + 1
+        return df
+
 # --- Configuration de la page ---
 st.set_page_config(page_title="Le Capital", layout="wide", page_icon="dcg.jpg")
 
@@ -25,8 +37,12 @@ def load_data2():
 df = load_data1()
 df2 = load_data2()
 
+nb_parties=df2["Partie_ID"].nunique()
+nb_joueurs=df2["Joueur"].nunique()
+
 st.title("🎯 Darts Club des Gones - Capital")
-st.markdown("Visualisez vos performances et les statistiques globales des soirées ! (voir menu à gauche)")
+st.markdown("Visualisez vos performances et les statistiques globales des soirées !")
+st.info(f"📅 Statistiques depuis le 8 Octobre 2025 - 🎯 {nb_parties} parties chargées - 👤 {nb_joueurs} joueurs différents")
 
 #df2["Points"]=5-df2["Classement_final"]
 df2["Session"]=df2["Date"].apply(lambda x: "Rentrée 2025" if x < "2025-11-01" else "Automne 2025" if x < "2025-12-18" else "Hiver 2026" if x < "2026-02-26" else "Mars 2026")
@@ -50,8 +66,8 @@ if "session_radio_tab2" not in st.session_state:
 # --- Filtres ---
 
 st.sidebar.title("Navigateur")
-choice = st.sidebar.radio("Sélectionnez une section", ["Général", 
-                                                      "Par joueur","Par contrat","Soirées","Tableau récap","Divers","Lancer une partie" ]) 
+choice = st.sidebar.radio("Sélectionnez une section", ["Menu","Général", 
+                                                      "Par joueur","Par contrat","Soirées","Tableau récap","Divers","Lancer une partie" ], key="navigation") 
 #st.sidebar.header("🧮 Filtres")
 #joueurs_sel = st.sidebar.multiselect("Sélectionnez les joueurs :", sorted(df["Joueur"].unique()), default=df["Joueur"].unique())
 #contrats_sel = st.sidebar.multiselect("Sélectionnez les contrats :", sorted(df["Contrat"].unique()), default=df["Contrat"].unique())
@@ -60,8 +76,23 @@ choice = st.sidebar.radio("Sélectionnez une section", ["Général",
 
 #df_final = df[df["Contrat"]=="25"]
 
-if choice=="Général":
 
+
+if choice=="Menu":
+
+    st.markdown("### 🚀 Accès rapide")
+    
+    # On ne crée pas de colonnes, on les empile simplement
+    st.button("📈 Statistiques globales", on_click=changer_page, args=("Général",), use_container_width=True)
+    st.button("👤 Statistiques par Joueur", on_click=changer_page, args=("Par joueur",), use_container_width=True)
+    st.button("🎯 Analyse des Contrats", on_click=changer_page, args=("Par contrat",), use_container_width=True)
+    st.button("📅 Historique des Soirées", on_click=changer_page, args=("Soirées",), use_container_width=True)
+    st.button("🏆 Tableau Récapitulatif", on_click=changer_page, args=("Tableau récap",), use_container_width=True)
+    st.button("📊 Divers", on_click=changer_page, args=("Divers",), use_container_width=True)
+    #st.button("🎲 Lancer une partie", on_click=changer_page, args=("Lancer une partie",), use_container_width=True)
+
+if choice=="Général":
+    st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     tab1,tab2=st.tabs(["Statistiques globales", "Classement"])
 
     with tab1 :
@@ -156,6 +187,7 @@ if choice=="Général":
         st.table(Classement)
 
 elif choice=="Par joueur":
+    st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     tab1, tab2= st.tabs(["Analyse par joueur", "Meilleurs joueurs"])
     with tab1 :
         st.subheader("Analyse par joueur")
@@ -226,12 +258,14 @@ elif choice=="Par joueur":
             .reset_index()
             .sort_values(["Réussi"], ascending=[False])
              )
+            df_reussi["Réussi"]=df_reussi["Réussi"].apply(lambda x: f"{x:.1%}")
             df_moy = (
             df2_dix.groupby(["Joueur"])["Score_final"]
             .mean()
             .reset_index()
             .sort_values(["Score_final"], ascending=[False])
             )
+            df_moy["Score_final"]=df_moy["Score_final"].map("{:.1f}".format)
             df_partie = (
             df_dix.groupby(["Joueur"])["Score_Après"]
             .mean()
@@ -239,15 +273,17 @@ elif choice=="Par joueur":
             .sort_values(["Score_Après"], ascending=[False])
             .rename(columns={"Score_Après": "Score moyen"})
             )
+            df_partie["Score moyen"]=df_partie["Score moyen"].map("{:.1f}".format)
             st.subheader("Top 10 des moyennes de score final")
-            st.table(df_moy.head(10))
+            st.table(preparer_classement(df_moy.head(10)))
             st.subheader("Top 10 en réussite des contrats (nombres compris)")
-            st.table(df_reussi.head(10))
+            st.table(preparer_classement(df_reussi.head(10)))
             st.subheader("Top 10 en score moyen au cours de la partie")
-            st.table(df_partie.head(10))
+            st.table(preparer_classement(df_partie.head(10)))
             
 
 elif choice=="Par contrat":
+    st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     tab1, tab2= st.tabs(["Contrats spéciaux", "Nombres"])
 
     with tab1:
@@ -266,6 +302,7 @@ elif choice=="Par contrat":
             .rename(columns={"Gain": "Gain", "count": "Occurrences"})
             .sort_values("Occurrences", ascending=False)
         )
+        total_occurrences=scores_freq["Occurrences"].sum()
         col2met = scores_freq["Gain"].iloc[0]
         col2.metric("Score le plus réalisé", f"{col2met:.0f}")
         col3met = scores_freq["Gain"].max()
@@ -273,7 +310,12 @@ elif choice=="Par contrat":
         fig, ax = plt.subplots(figsize=(10, 5))
         sns.barplot(data=scores_freq.head(20), x="Gain", y="Occurrences", ax=ax, order=scores_freq["Gain"].head(20))
         for container in ax.containers:
-            ax.bar_label(container, fmt="%d", label_type="edge", padding=3)
+            labels = []
+            for v in container.datavalues:
+                    pct=(v/total_occurrences)*100 
+                    labels.append(f"{pct:.1f}%")
+                    
+            ax.bar_label(container, labels=labels, label_type="edge", padding=3, fontsize=9)
         ax.set_title("Les scores les plus réalisés", fontsize=14)
         ax.set_xlabel("Score", fontsize=12)
         ax.set_ylabel("Nombre d'occurrences", fontsize=12)
@@ -287,7 +329,8 @@ elif choice=="Par contrat":
             .reset_index()
             .sort_values(["Gain"], ascending=[False])
             )
-            st.table(taux_par_joueur.head(20))
+            taux_par_joueur["Gain"]=taux_par_joueur["Gain"].map("{:.2f}".format)
+            st.table(preparer_classement(taux_par_joueur.head(20)))
 
         else :
             st.subheader("Meilleurs joueurs pour ce contrat")
@@ -297,7 +340,8 @@ elif choice=="Par contrat":
             .reset_index()
             .sort_values(["Réussi"], ascending=[False])
             )
-            st.table(taux_par_joueur.head(10))
+            taux_par_joueur["Réussi"]=taux_par_joueur["Réussi"].apply(lambda x: f"{x:.1%}")
+            st.table(preparer_classement(taux_par_joueur.head(10)))
     with tab2:
         dftab2=df_dix[df_dix["Type_Contrat"]=="Nombre"]
         dftab22=df[df["Type_Contrat"]=="Nombre"]
@@ -336,7 +380,8 @@ elif choice=="Par contrat":
         .reset_index()
         .sort_values(["Réussi"], ascending=[False])
         )
-        st.table(taux_par_joueur22.head(10))
+        taux_par_joueur22["Réussi"]=taux_par_joueur22["Réussi"].apply(lambda x: f"{x:.1%}")
+        st.table(preparer_classement(taux_par_joueur22.head(10)))
         st.subheader("Meilleurs joueurs sur les nombres (moyenne)")
         taux_par_joueur2 = (
         dftab2.groupby(["Joueur"])["Nb"]
@@ -344,7 +389,8 @@ elif choice=="Par contrat":
         .reset_index()
         .sort_values(["Nb"], ascending=[False])
         )
-        st.table(taux_par_joueur2.head(10))
+        taux_par_joueur2["Nb"]=taux_par_joueur2["Nb"].map("{:.2f}".format)
+        st.table(preparer_classement(taux_par_joueur2.head(10)))
 
         joueur_sel = st.selectbox("Stats par joueur :", sorted(df["Joueur"].unique()))
         df_filt=dftab22[dftab22["Joueur"]==joueur_sel]
@@ -375,10 +421,12 @@ elif choice=="Par contrat":
         for i in range(20,12,-1):
                     st.subheader(f"Meilleurs joueurs au {i}")
                     dfnb=taux_par_joueur2[taux_par_joueur2["Contrat"]==str(i)]
-                    st.table(dfnb.head(10))
+                    dfnb["Nb"]=dfnb["Nb"].map("{:.2f}".format)
+                    st.table(preparer_classement(dfnb.head(10)))
 
 
 elif choice=="Soirées":
+    st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     st.subheader("📅 Résumé des soirées")
     taux_par_soiree=(
         df.groupby("Date")["Réussi"].mean()
@@ -406,20 +454,21 @@ elif choice=="Soirées":
 )
 
     st.table(styled_df)
+    ###
+    #st.subheader("Evolution des performances")
+    #fig, ax1 = plt.subplots(figsize=(10, 4))
+    #ax1.plot(df_soiree["Score_moyen"], marker="o", linewidth=2, color="m")
+    #ax1.set_ylabel("Score moyen", color="m")
+    #ax1.set_xlabel("Date")
 
-    st.subheader("Evolution des performances")
-    fig, ax1 = plt.subplots(figsize=(10, 4))
-    ax1.plot(df_soiree["Score_moyen"], marker="o", linewidth=2, color="m")
-    ax1.set_ylabel("Score moyen", color="m")
-    ax1.set_xlabel("Date")
-
-    ax2=ax1.twinx()
-    ax2.plot(df_soiree["Taux de réussite"], marker="x", linewidth=2, color="y")
-    ax2.set_ylabel("Taux de réussite", color="y")
-    fig.tight_layout()
-    st.pyplot(fig)
+    #ax2=ax1.twinx()
+    #ax2.plot(df_soiree["Taux de réussite"], marker="x", linewidth=2, color="y")
+    #ax2.set_ylabel("Taux de réussite", color="y")
+    #fig.tight_layout()
+    #st.pyplot(fig)
 
 elif choice=="Tableau récap":
+    st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     df["Division"] = (df["Réussi"] == 0).astype(int)
     df_divisions = (
         df.groupby(["Partie_ID", "Joueur"])["Division"]
@@ -497,7 +546,7 @@ elif choice=="Tableau récap":
     
     #st.table(df_divisions.head(10))
 elif choice=="Divers":
-
+    st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     tab1, tab2,tab3,tab4= st.tabs(["Classement Elo", "Face à Face","Magnum","Gibolins"])
 
     with tab1 :
@@ -736,13 +785,16 @@ elif choice=="Divers":
     
 
         records_personnels=test1.sort_values('Contrat', ascending=False).drop_duplicates('Joueur')
-
+        total_global_premieres_div=len(test1)
         for contrat in reversed(ordre_contrats):
             joueurs_record=records_personnels[records_personnels['Contrat']==contrat]['Joueur'].tolist()
+            lignes_contrat = test1[test1['Contrat'] == contrat]
             nb_arrets_total=len(test1[test1['Contrat']==contrat])
             
             if nb_arrets_total>0:
-                st.subheader(f"📝 Contrat **{contrat}** — {nb_arrets_total} premières divisions au total")
+                pourcentage = (nb_arrets_total / total_global_premieres_div) * 100
+                st.subheader(f"📝 Contrat **{contrat}** — {pourcentage:.1f}% des premières divisions au total")
+                
                 if joueurs_record:
                     st.write("🏅 **Record personnel pour :**")
                     for j in joueurs_record:
