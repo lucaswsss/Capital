@@ -86,14 +86,15 @@ if choice=="Menu":
     st.button("📈 Statistiques globales", on_click=changer_page, args=("Général",), use_container_width=True)
     st.button("👤 Statistiques par Joueur", on_click=changer_page, args=("Par joueur",), use_container_width=True)
     st.button("🎯 Analyse des Contrats", on_click=changer_page, args=("Par contrat",), use_container_width=True)
-    st.button("📅 Historique des Soirées", on_click=changer_page, args=("Soirées",), use_container_width=True)
     st.button("🏆 Tableau Récapitulatif", on_click=changer_page, args=("Tableau récap",), use_container_width=True)
     st.button("📊 Divers", on_click=changer_page, args=("Divers",), use_container_width=True)
+    st.button("📅 Historique des Soirées", on_click=changer_page, args=("Soirées",), use_container_width=True)
+    
     #st.button("🎲 Lancer une partie", on_click=changer_page, args=("Lancer une partie",), use_container_width=True)
 
 if choice=="Général":
     st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
-    tab1,tab2=st.tabs(["Statistiques globales", "Classement"])
+    tab1,tab2=st.tabs(["📊 Statistiques globales", "🏆 Classement"])
 
     with tab1 :
         st.subheader("📈 Statistiques globales")
@@ -188,7 +189,7 @@ if choice=="Général":
 
 elif choice=="Par joueur":
     st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
-    tab1, tab2= st.tabs(["Analyse par joueur", "Meilleurs joueurs"])
+    tab1, tab2= st.tabs(["👤 Analyse par joueur", "🥇 Meilleurs joueurs"])
     with tab1 :
         st.subheader("Analyse par joueur")
         df25=df.copy()
@@ -284,7 +285,7 @@ elif choice=="Par joueur":
 
 elif choice=="Par contrat":
     st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
-    tab1, tab2= st.tabs(["Contrats spéciaux", "Nombres"])
+    tab1, tab2= st.tabs(["🧩 Contrats spéciaux", "🔢 Nombres"])
 
     with tab1:
         contrat = st.selectbox("Contrat",df[df["Type_Contrat"].isin(["Spécial", "Points"])]["Contrat"].unique())
@@ -547,7 +548,7 @@ elif choice=="Tableau récap":
     #st.table(df_divisions.head(10))
 elif choice=="Divers":
     st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
-    tab1, tab2,tab3,tab4= st.tabs(["Classement Elo", "Face à Face","Magnum","Gibolins"])
+    tab1, tab2,tab3,tab4= st.tabs(["📈 Classement Elo", "🆚 Face à Face","🍾 Magnum","🧪 Gibolins"])
 
     with tab1 :
         
