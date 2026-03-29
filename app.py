@@ -6,6 +6,8 @@ import matplotlib.ticker as ticker
 import seaborn as sns
 import plotly.express as px
 
+st.set_page_config(page_title="Le Capital", layout="wide", page_icon="dcg.jpg")
+
 if "navigation" not in st.session_state:
     st.session_state["navigation"] = "Menu"
 
@@ -19,7 +21,7 @@ def preparer_classement(df):
         return df
 
 # --- Configuration de la page ---
-st.set_page_config(page_title="Le Capital", layout="wide", page_icon="dcg.jpg")
+
 
 # --- Chargement des données ---
 @st.cache_data
