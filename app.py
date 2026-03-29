@@ -67,9 +67,9 @@ if "session_radio_tab2" not in st.session_state:
     st.session_state["session_radio_tab2"] = "Automne 2025"
 # --- Filtres ---
 
-st.sidebar.title("Navigateur")
-choice = st.sidebar.radio("Sélectionnez une section", ["Menu","Général", 
-                                                      "Par joueur","Par contrat","Soirées","Tableau récap","Divers","Lancer une partie" ], key="navigation") 
+#st.sidebar.title("Navigateur")
+#choice = st.sidebar.radio("Sélectionnez une section", ["Menu","Général", 
+                                                      #"Par joueur","Par contrat","Soirées","Tableau récap","Divers","Lancer une partie" ], key="navigation") 
 #st.sidebar.header("🧮 Filtres")
 #joueurs_sel = st.sidebar.multiselect("Sélectionnez les joueurs :", sorted(df["Joueur"].unique()), default=df["Joueur"].unique())
 #contrats_sel = st.sidebar.multiselect("Sélectionnez les contrats :", sorted(df["Contrat"].unique()), default=df["Contrat"].unique())
@@ -80,9 +80,9 @@ choice = st.sidebar.radio("Sélectionnez une section", ["Menu","Général",
 
 
 
-if choice=="Menu":
+if st.session_state["navigation"] == "Menu":
 
-    st.markdown("### 🚀 Accès rapide")
+    st.markdown("### 🚀 Menu")
     
     # On ne crée pas de colonnes, on les empile simplement
     st.button("📈 Statistiques globales", on_click=changer_page, args=("Général",), use_container_width=True)
@@ -94,7 +94,7 @@ if choice=="Menu":
     
     #st.button("🎲 Lancer une partie", on_click=changer_page, args=("Lancer une partie",), use_container_width=True)
 
-if choice=="Général":
+if st.session_state["navigation"] =="Général":
     st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     tab1,tab2=st.tabs(["📊 Statistiques globales", "🏆 Classement"])
 
@@ -189,7 +189,7 @@ if choice=="Général":
         Classement.index=range(1, len(Classement)+1)
         st.table(Classement)
 
-elif choice=="Par joueur":
+elif st.session_state["navigation"] =="Par joueur":
     st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     tab1, tab2= st.tabs(["👤 Analyse par joueur", "🥇 Meilleurs joueurs"])
     with tab1 :
@@ -285,7 +285,7 @@ elif choice=="Par joueur":
             st.table(preparer_classement(df_partie.head(10)))
             
 
-elif choice=="Par contrat":
+elif st.session_state["navigation"] =="Par contrat":
     st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     tab1, tab2= st.tabs(["🧩 Contrats spéciaux", "🔢 Nombres"])
 
@@ -428,7 +428,7 @@ elif choice=="Par contrat":
                     st.table(preparer_classement(dfnb.head(10)))
 
 
-elif choice=="Soirées":
+elif st.session_state["navigation"] =="Soirées":
     st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     st.subheader("📅 Résumé des soirées")
     taux_par_soiree=(
@@ -470,7 +470,7 @@ elif choice=="Soirées":
     #fig.tight_layout()
     #st.pyplot(fig)
 
-elif choice=="Tableau récap":
+elif st.session_state["navigation"] =="Tableau récap":
     st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     df["Division"] = (df["Réussi"] == 0).astype(int)
     df_divisions = (
@@ -548,7 +548,7 @@ elif choice=="Tableau récap":
     #st.dataframe(df_divpartie)
     
     #st.table(df_divisions.head(10))
-elif choice=="Divers":
+elif st.session_state["navigation"] =="Divers":
     st.button("⬅️ Menu", on_click=changer_page, args=("Menu",))
     tab1, tab2,tab3,tab4= st.tabs(["📈 Classement Elo", "🆚 Face à Face","🍾 Magnum","🧪 Gibolins"])
 
@@ -816,7 +816,7 @@ elif choice=="Divers":
         mat=mat[mat['Joueur_1']<mat['Joueur_2']]
         mat=mat[['Joueur_1','Joueur_2','Victoires_J1','Victoires_J2','Total_Matchs']].sort_values(by='Total_Matchs', ascending=False)
         st.subheader("Les confrontations les plus fréquentes")
-        st.dataframe(mat.head(10))
+        st.dataframe(preparer_classement(mat.head(10)))
         st.subheader("Chercher les face à face pour un joueur particulier :")
         joujou=st.selectbox("Joueur", sorted(df2["Joueur"].unique()))
         if joujou:
@@ -825,7 +825,7 @@ elif choice=="Divers":
             hthj['Défaites']=hthj['Matchs']-hthj['Victoires']
             hthj=hthj[['Joueur','Adversaire','Victoires','Défaites','Matchs']].sort_values(by='Matchs', ascending=False)
             hthj=hthj[hthj["Joueur"]==joujou]
-            st.dataframe(hthj)
+            st.dataframe(preparer_classement(hthj))
     with tab4:
         liste_gibolins=[i*111 for i in range(1,9)]
         df["Gibolins"]=df["Score_Après"].isin(liste_gibolins)
@@ -840,7 +840,7 @@ elif choice=="Divers":
         st.dataframe(df_gibolins[df_gibolins["Gibolins"]>0])
 
 
-elif choice=="Lancer une partie" :
+elif st.session_state["navigation"] =="Lancer une partie" :
     
     # Configuration de la page
     st.title("🎯 Saisie de Partie en Direct")
