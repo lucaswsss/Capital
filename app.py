@@ -655,7 +655,7 @@ elif st.session_state["navigation"] =="Divers":
 
         st.subheader("🏆 Classement Actuel")
         st.info("Elo de départ : 1500 - Joueurs avec 15+ parties affichés")
-        st.dataframe(df_affiche[['Joueur', 'Elo', 'Evolution']].style.applymap(style_tendance, subset=['Evolution']),use_container_width=True,hide_index=True)
+        st.dataframe(df_affiche[['Joueur', 'Elo', 'Evolution']].style.map(style_tendance, subset=['Evolution']),use_container_width=True,hide_index=True)
         
         st.divider()
 
