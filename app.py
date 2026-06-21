@@ -47,10 +47,10 @@ st.markdown("Visualisez vos performances et les statistiques globales des soiré
 st.info(f"📅 Statistiques depuis le 8 Octobre 2025 - 🎯 {nb_parties} parties chargées - 👤 {nb_joueurs} joueurs différents")
 
 #df2["Points"]=5-df2["Classement_final"]
-df2["Session"]=df2["Date"].apply(lambda x: "Rentrée 2025" if x < "2025-11-01" else "Automne 2025" if x < "2025-12-18" else "Hiver 2026" if x < "2026-02-26" else "Mars 2026")
+df2["Session"]=df2["Date"].apply(lambda x: "Rentrée 2025" if x < "2025-11-01" else "Automne 2025" if x < "2025-12-18" else "Hiver 2026" if x < "2026-02-26" else "Mars 2026" if x < "2026-04-30" else "Eté 2026")
 finales = pd.DataFrame({
-    "Session": ["Mars 2026","Hiver 2026", "Rentrée 2025", "Automne 2025"],
-    "Finale": ["2026-04-29","2026-02-25","2025-10-29","2025-12-17"]
+    "Session": ["Eté 2026", "Mars 2026","Hiver 2026", "Rentrée 2025", "Automne 2025"],
+    "Finale": ["2026-07-01","2026-04-29","2026-02-25","2025-10-29","2025-12-17"]
 })
 #finales["Finale"] = pd.to_datetime(finales["Finale"])
 #finales=finales.rename(columns={"Date":"Finale"})
