@@ -178,7 +178,7 @@ if st.session_state["navigation"] =="Général":
 
 
     with tab2 :
-        session = st.selectbox("Session", ["Mars 2026", "Hiver 2026", "Automne 2025", "Rentrée 2025"])
+        session = st.selectbox("Session", ["Eté 2026", "Mars 2026", "Hiver 2026", "Automne 2025", "Rentrée 2025"])
         df2clas=df2[df2["Session"] == session]
         Classement=(
             df2clas.groupby(["Joueur"])["Points"]
